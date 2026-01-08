@@ -10,6 +10,6 @@
     - Implement `agents/graph.py`.
     - Verification: `uv run python -c "from agents.graph import graph"` succeeds (compilation check).
 
-- [/] **Task 4: CLI Runner**
+- [x] **Task 4: CLI Runner**
     - Implement `main.py`.
     - Verification: `uv run main.py` runs a full dialogue loop.
