@@ -13,3 +13,8 @@
     - Create `docker-compose.yml`.
     - Start containers (`up -d`).
     - Verification: `docker ps` shows running services.
+
+- [x] **Task 4: Documentation**
+    - Create `docs/` directory.
+    - Write `docs/setup-guide.md` (Setup, Run, Troubleshoot).
+    - Link in `README.md`.

@@ -35,3 +35,6 @@
 - `/workflows`: n8n 자동화 워크플로우 정의 파일
 - `/data`: 임시 벡터 DB 저장 경로
 - `docker-compose.yml`: 전체 시스템 통합 실행 설정
+
+## 5. Documentation
+- [Setup & Troubleshooting Guide](docs/setup-guide.md): 설치, 실행, 문제 해결 가이드.
