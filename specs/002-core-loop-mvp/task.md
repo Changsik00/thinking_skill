@@ -2,7 +2,7 @@
     - Implement `agents/prompts.py`.
     - Verification: Manual check of prompt strings.
 
-- [ ] **Task 2: State Definition**
+- [x] **Task 2: State Definition**
     - Implement `agents/state.py`.
     - Verification: `uv run python -c "from agents.state import AgentState"` succeeds.
 
