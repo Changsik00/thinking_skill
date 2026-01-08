@@ -1,48 +1,48 @@
-# Setup & Troubleshooting Guide
+# 설정 및 문제 해결 가이드 (Setup & Troubleshooting)
 
-## 1. Prerequisites
-- **OS**: macOS (Recommended), Linux, or Windows (WSL2)
-- **Python**: 3.11 or higher
-- **Docker**: Docker Desktop must be installed and running.
+## 1. 사전 요구 사항 (Prerequisites)
+- **OS**: macOS (권장), Linux, 또는 Windows (WSL2)
+- **Python**: 3.11 버전 이상
+- **Docker**: Docker Desktop이 설치되어 있고 실행 중이어야 합니다.
 
-## 2. Installation
+## 2. 설치 (Installation)
 
-1.  **Clone the repository** (if not already done).
-2.  **Environment Setup**:
+1.  **레포지토리 클론**: (이미 완료했다면 생략)
+2.  **환경 변수 설정**:
     ```bash
     cp .env.example .env
-    # Edit .env and key in your GEMINI_API_KEY
+    # .env 파일을 열어 GEMINI_API_KEY 값을 입력하세요.
     ```
-3.  **Install Python Dependencies**:
+3.  **Python 의존성 설치**:
     ```bash
     pip install -r requirements.txt
     ```
 
-## 3. Running the Infrastructure
-MACS uses Docker for its "Body" (Action & Memory) layer.
+## 3. 인프라 실행 (Running the Infrastructure)
+MACS는 행동 및 메모리 계층(Action & Memory)을 위해 Docker를 사용합니다.
 
 ```bash
 docker compose up -d
 ```
 
-Check if services are running:
+서비스 실행 확인:
 ```bash
 docker ps
-# Should see: 'chromadb/chroma' and 'n8n'
+# 'chromadb/chroma' 와 'n8n' 컨테이너가 보여야 합니다.
 ```
 
-## 4. Troubleshooting
+## 4. 문제 해결 (Troubleshooting)
 
-### Issue: Docker Connection Failed
-**Error**: `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
-**Solution**:
-- Ensure **Docker Desktop** app is running.
-- On macOS, look for the whale icon in the menu bar.
+### 문제: Docker 연결 실패
+**에러**: `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
+**해결**:
+- **Docker Desktop** 앱이 실행 중인지 확인하세요.
+- macOS의 경우, 상단 메뉴바에 고래 아이콘이 있는지 확인하세요.
 
-### Issue: Container Name Conflict
-**Error**: `Conflict. The container name "/thingking-n8n-1" is already in use...`
-**Solution**:
-Old containers might be lingering. Remove them and restart:
+### 문제: 컨테이너 이름 충돌
+**에러**: `Conflict. The container name "/thingking-n8n-1" is already in use...`
+**해결**:
+이전 컨테이너가 남아있는 경우입니다. 삭제 후 다시 실행하세요:
 ```bash
 docker rm -f thingking-n8n-1 thingking-chroma-1
 docker compose up -d
