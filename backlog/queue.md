@@ -37,3 +37,4 @@ _Focus: User Experience._
 - [ ] Voice Interface (TTS/STT).
 - [ ] YouTube API Integration (Auto-upload).
 - [ ] Dashboard for vector DB visualization.
+- [ ] **Gemini 3 Migration**: Upgrade to `gemini-3-flash` and use `thinking_level`.

@@ -38,3 +38,4 @@
 
 ## 5. Documentation
 - [Setup & Troubleshooting Guide](docs/setup-guide.md): 설치, 실행, 문제 해결 가이드.
+- [Core Loop Architecture](docs/core-loop-architecture.md): 토론 엔진(LangGraph) 동작 원리 설명.
