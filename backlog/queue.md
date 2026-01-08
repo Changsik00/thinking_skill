@@ -5,7 +5,7 @@ This document tracks all planned work, organized by MVP phases to ensure a Lean 
 ## 0. Now (Current Priority)
 _Items promoted to Spec or currently under discussion._
 
-- [ ] **[Phase 1] Foundation Setup**
+- [x] **[Phase 1] Foundation Setup**
     - Create directory structure (`agents`, `mcp-servers`, `workflows`, `data`).
     - Initialize Python environment (`poetry` or `pip`, `.gitignore`).
     - Create `docker-compose.yml` for ChromaDB & n8n.

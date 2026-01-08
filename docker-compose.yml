@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  chroma:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/chroma:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+    networks:
+      - macs-network
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - ./data/n8n:/home/node/.n8n
+    environment:
+      - N8N_SECURE_COOKIE=false
+    networks:
+      - macs-network
+
+networks:
+  macs-network:
+    driver: bridge
