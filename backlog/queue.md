@@ -38,3 +38,4 @@ _Focus: User Experience._
 - [ ] YouTube API Integration (Auto-upload).
 - [ ] Dashboard for vector DB visualization.
 - [ ] **Gemini 3 Migration**: Upgrade to `gemini-3-flash` and use `thinking_level`.
+- [ ] **Selective Archiving**: Allow user to say "Save this" during chat to trigger storage (requires Interface MVP).
