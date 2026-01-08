@@ -14,10 +14,10 @@ _Items promoted to Spec or currently under discussion._
 ## 1. Next (Phase 2: Core Loop MVP)
 _Focus: Verify the debate logic in isolation (Terminal-based)._
 
-- [ ] **LangGraph Base Setup**: Define State and Nodes.
-- [ ] **Agent Personas**: Implement "Creative" and "Critical" system prompts.
-- [ ] **Debate Logic**: Implement the loop (Host -> A -> B -> Host).
-- [ ] **Terminal Demo**: Run the debate in the console to verify logic.
+- [x] **LangGraph Base Setup**: Define State and Nodes.
+- [x] **Agent Personas**: Implement "Creative" and "Critical" system prompts.
+- [x] **Debate Logic**: Implement the loop (Host -> A -> B -> Host).
+- [x] **Terminal Demo**: Run the debate in the console to verify logic.
 
 ## 2. Later (Phase 3: Integration MVP)
 _Focus: Connect the brain to the body (Automation & Memory)._
