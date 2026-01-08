@@ -6,6 +6,7 @@ import sys
 from langchain_core.messages import HumanMessage
 from agents.graph import graph
 from utils.storage import save_to_markdown, save_to_chroma
+from utils.automation import trigger_n8n_workflow
 
 def run_loop():
     print("=== MACS: Multi-Agent Creative Studio (MVP) ===")
@@ -55,6 +56,9 @@ def run_loop():
                 save_to_chroma(user_input, final_content)
             except Exception as e:
                 print(f"\n[System] ChromaDB Error: {e}")
+                
+            # n8n Automation
+            trigger_n8n_workflow(user_input, final_content)
         else:
             print("\n[System]: No content to archive.")
 

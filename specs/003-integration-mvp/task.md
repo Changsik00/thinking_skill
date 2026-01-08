@@ -10,7 +10,7 @@
     - Integrate into `agents/runner.py`.
     - Verification: Run runner, check ChromaDB data count.
 
-- [ ] **Task 3: n8n Webhook**
+- [x] **Task 3: n8n Webhook**
     - Create `utils/automation.py` with `trigger_n8n_workflow`.
     - Integrate into `agents/runner.py`.
     - Verification: Run runner, check n8n Execution log.
