@@ -51,8 +51,9 @@ def critical_node(state: AgentState):
     """
     messages = state["messages"]
     system_message = SystemMessage(content=CRITICAL_SYSTEM_PROMPT)
+    trigger_message = HumanMessage(content="위의 아이디어들을 분석하고 비판해 주세요.")
     
-    response = llm.invoke([system_message] + messages)
+    response = llm.invoke([system_message] + messages + [trigger_message])
     response.name = "critical"
     
     return {"messages": [response]}

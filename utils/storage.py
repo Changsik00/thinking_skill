@@ -32,3 +32,26 @@ Date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         f.write(markdown_content)
         
     return os.path.abspath(file_path)
+
+import chromadb
+from chromadb.config import Settings
+
+def save_to_chroma(topic: str, content: str) -> None:
+    """
+    Saves the content to ChromaDB (vector store).
+    """
+    # Load config from env (or hardcode default for MVP)
+    # Using 'http' implementation to talk to Docker container
+    client = chromadb.HttpClient(host='localhost', port=8000)
+    
+    collection = client.get_or_create_collection(name="macs_discussions")
+    
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    doc_id = f"{sanitize_filename(topic)}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+    
+    collection.add(
+        documents=[content],
+        metadatas=[{"topic": topic, "timestamp": timestamp}],
+        ids=[doc_id]
+    )
+    print(f"\n[System]: Saved to ChromaDB (ID: {doc_id})")

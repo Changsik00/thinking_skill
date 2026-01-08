@@ -5,7 +5,7 @@ import sys
 
 from langchain_core.messages import HumanMessage
 from agents.graph import graph
-from utils.storage import save_to_markdown
+from utils.storage import save_to_markdown, save_to_chroma
 
 def run_loop():
     print("=== MACS: Multi-Agent Creative Studio (MVP) ===")
@@ -49,6 +49,12 @@ def run_loop():
         if final_content:
             saved_path = save_to_markdown(user_input, final_content)
             print(f"\n[System]: Archived discussion to {saved_path}")
+            
+            # ChromaDB
+            try:
+                save_to_chroma(user_input, final_content)
+            except Exception as e:
+                print(f"\n[System] ChromaDB Error: {e}")
         else:
             print("\n[System]: No content to archive.")
 

@@ -5,7 +5,7 @@
     - Integrate into `agents/runner.py`.
     - Verification: Run runner, check `data/archives`.
 
-- [ ] **Task 2: ChromaDB Integration**
+- [x] **Task 2: ChromaDB Integration**
     - Update `utils/storage.py` with `save_to_chroma`.
     - Integrate into `agents/runner.py`.
     - Verification: Run runner, check ChromaDB data count.
