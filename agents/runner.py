@@ -5,6 +5,8 @@ import sys
 
 from langchain_core.messages import HumanMessage
 from agents.graph import graph
+from utils.storage import save_to_markdown, save_to_chroma
+from utils.automation import trigger_n8n_workflow
 
 def run_loop():
     print("=== MACS: Multi-Agent Creative Studio (MVP) ===")
@@ -27,6 +29,7 @@ def run_loop():
         initial_state = {"messages": [HumanMessage(content=user_input)]}
 
         # Stream Execution
+        final_content = ""
         for event in graph.stream(initial_state):
             for node, data in event.items():
                 if "messages" in data and data["messages"]:
@@ -35,8 +38,29 @@ def run_loop():
                     content = latest_msg.content
                     print(f"--- [{sender}] ---")
                     print(f"{content}\n")
+                    
+                    # Store Critical's response as potential final conclusion
+                    # Assuming Critical is the last node in MVP loop
+                    if node == "critical":
+                        final_content = content
 
         print("=== Loop Finished ===")
+        
+        # Archiving
+        if final_content:
+            saved_path = save_to_markdown(user_input, final_content)
+            print(f"\n[System]: Archived discussion to {saved_path}")
+            
+            # ChromaDB
+            try:
+                save_to_chroma(user_input, final_content)
+            except Exception as e:
+                print(f"\n[System] ChromaDB Error: {e}")
+                
+            # n8n Automation
+            trigger_n8n_workflow(user_input, final_content)
+        else:
+            print("\n[System]: No content to archive.")
 
     except KeyboardInterrupt:
         print("\n\nAborted.")
