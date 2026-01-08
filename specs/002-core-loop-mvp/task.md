@@ -11,5 +11,5 @@
     - Verification: `uv run python -c "from agents.graph import graph"` succeeds (compilation check).
 
 - [x] **Task 4: CLI Runner**
-    - Implement `main.py`.
-    - Verification: `uv run main.py` runs a full dialogue loop.
+    - Implement `agents/runner.py`.
+    - Verification: `uv run python -m agents.runner` runs a full dialogue loop.

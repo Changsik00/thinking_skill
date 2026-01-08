@@ -10,13 +10,14 @@ Spec 002에 정의된 **Host -> Creative -> Critical** 에이전트 토론 루�
     - `state.py`: LangGraph 상태 정의 (`messages`).
     - `graph.py`: Gemini 2.0 Flash 모델 연동 및 Node/Edge 연결.
 - **Entry Point**:
-    - `main.py`: CLI 실행기 구현.
+    - `agents/runner.py`: CLI 실행기 (기존 `main.py`에서 이동).
+    - 실행 명령: `uv run python -m agents.runner "주제"`
 - **Configuration**:
     - `pyproject.toml`: `onnxruntime` 호환을 위해 Python 버전을 `3.11` 이상으로 상향.
     - Model Update: `gemini-1.5-flash`가 API에서 잡히지 않아 `gemini-2.0-flash-001`로 변경.
 
 ## 검증 (Verification)
-- [x] **CLI 실행**: `uv run main.py "주제"` 명령으로 정상 작동 확인.
+- [x] **CLI 실행**: `uv run python -m agents.runner "주제"` 명령으로 정상 작동 확인.
 - [x] **페르소나 확인**: Creative가 아이디어를 내고, Critical이 이를 비판하는 흐름 확인.
 
 ## 연결된 Spec

@@ -1,9 +1,12 @@
-# main.py
+# agents/runner.py
 import sys
+# If running as a script inside agents, we might need sys.path hack or run as module
+# Standardizing to run via `uv run python -m agents.runner`
+
 from langchain_core.messages import HumanMessage
 from agents.graph import graph
 
-def main():
+def run_loop():
     print("=== MACS: Multi-Agent Creative Studio (MVP) ===")
     print("Type 'exit' or 'q' to quit.")
     
@@ -41,4 +44,4 @@ def main():
         print(f"\n[Error]: {e}")
 
 if __name__ == "__main__":
-    main()
+    run_loop()
