@@ -13,3 +13,7 @@
 - [x] **Task 4: CLI Runner**
     - Implement `agents/runner.py`.
     - Verification: `uv run python -m agents.runner` runs a full dialogue loop.
+
+- [x] **Task 5: Documentation**
+    - Create `docs/core-loop-architecture.md`.
+    - Link in `README.md`.

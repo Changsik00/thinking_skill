@@ -15,6 +15,8 @@ Spec 002에 정의된 **Host -> Creative -> Critical** 에이전트 토론 루�
 - **Configuration**:
     - `pyproject.toml`: `onnxruntime` 호환을 위해 Python 버전을 `3.11` 이상으로 상향.
     - Model Update: `gemini-1.5-flash`가 API에서 잡히지 않아 `gemini-2.0-flash-001`로 변경.
+- **Documentation**:
+    - `docs/core-loop-architecture.md`: LangGraph 동작 원리 및 아키텍처 설명 추가.
 
 ## 검증 (Verification)
 - [x] **CLI 실행**: `uv run python -m agents.runner "주제"` 명령으로 정상 작동 확인.
