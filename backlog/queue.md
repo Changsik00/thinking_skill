@@ -22,9 +22,9 @@ _Focus: Verify the debate logic in isolation (Terminal-based)._
 ## 2. Later (Phase 3: Integration MVP)
 _Focus: Connect the brain to the body (Automation & Memory)._
 
-- [ ] **n8n Webhook**: Create n8n workflow to receive data.
-- [ ] **ChromaDB Connection**: Implement Python client to save vectors.
-- [ ] **Archiving**: Logic to save discussion summary to Markdown/Obsidian.
+- [x] **n8n Webhook**: Create n8n workflow to receive data.
+- [x] **ChromaDB Connection**: Implement Python client to save vectors.
+- [x] **Archiving**: Logic to save discussion summary to Markdown/Obsidian.
 
 ## 3. Future (Phase 4: Interface MVP)
 _Focus: User Experience._
@@ -39,3 +39,4 @@ _Focus: User Experience._
 - [ ] Dashboard for vector DB visualization.
 - [ ] **Gemini 3 Migration**: Upgrade to `gemini-3-flash` and use `thinking_level`.
 - [ ] **Selective Archiving**: Allow user to say "Save this" during chat to trigger storage (requires Interface MVP).
+- [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container to `docker-compose.yml` for visual data inspection.
