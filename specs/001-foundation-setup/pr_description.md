@@ -14,11 +14,13 @@ Implements the foundational infrastructure for the MACS project, enabling Phase 
 - **Documentation**:
     - Reorganized `specs/` directory.
     - Updated `agent.md` with stricter folder rules.
+    - Added `docs/setup-guide.md` and linked in `README.md`.
 
 ## Verification
 - [x] **Folder Structure**: Verified via `ls -R`.
 - [x] **Python Env**: Verified via `pip install --dry-run`.
 - [x] **Docker**: Verified via `docker ps` (ChromaDB & n8n running).
+- [x] **Documentation**: Checked `README.md` link and `setup-guide.md` content.
 
 ## Linked Spec
 - [Spec 001](specs/001-foundation-setup/spec.md)
