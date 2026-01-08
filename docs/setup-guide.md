@@ -32,7 +32,26 @@ docker ps
 # 'chromadb/chroma' 와 'n8n' 컨테이너가 보여야 합니다.
 ```
 
-## 4. 문제 해결 (Troubleshooting)
+
+## 4. n8n 설정 (n8n Setup)
+
+n8n을 처음 실행하면 초기 설정이 필요합니다.
+
+1.  **접속**: 브라우저에서 [http://localhost:5678](http://localhost:5678) 접속.
+2.  **계정 생성**: 'Set up admin account' 화면에서 이메일/비밀번호 입력 (로컬 전용이므로 자유롭게 입력).
+3.  **Webhook 생성**:
+    - 우측 상단 `+ Add first step` 클릭.
+    - 검색창에 `Webhook` 입력 후 선택.
+    - **Authentication**: `None` 선택.
+    - **HTTP Method**: `POST` 선택.
+    - **Path**: `macs-endpoint` 입력.
+    - 상단 `Webhook` 노드 창 닫기 (X 버튼).
+4.  **활성화**:
+    - 우측 상단 `Activate` 스위치를 켭니다. (Activate Workflow)
+
+> **Note**: 이 설정을 마치면 에이전트 실행 시 "n8n Webhook triggered successfully" 메시지가 뜹니다.
+
+## 5. 문제 해결 (Troubleshooting)
 
 ### 문제: Docker 연결 실패
 **에러**: `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
