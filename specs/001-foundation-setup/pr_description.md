@@ -6,7 +6,8 @@ MACS 프로젝트의 Phase 2 개발을 가능하게 하는 기초 인프라를 �
 ## 변경 사항 (Changes)
 - **디렉토리 구조**: `agents`, `mcp-servers`, `workflows`, `data` 생성.
 - **Python 환경**:
-    - `pyproject.toml` 대신 `requirements.txt` (pip 기반) 사용.
+    - **uv** 패키지 매니저 도입 (`pyproject.toml`, `uv.lock`).
+    - `requirements.txt` 제거.
     - `.env.example` 추가.
 - **Docker 오케스트레이션**:
     - ChromaDB 및 n8n 실행을 위한 `docker-compose.yml` 생성.
@@ -18,7 +19,7 @@ MACS 프로젝트의 Phase 2 개발을 가능하게 하는 기초 인프라를 �
 
 ## 검증 (Verification)
 - [x] **폴더 구조**: `ls -R`로 확인 완료.
-- [x] **Python 환경**: `pip install --dry-run`으로 확인 완료.
+- [x] **Python 환경**: `uv sync`로 확인 완료.
 - [x] **Docker**: `docker ps`로 실행 상태(ChromaDB, n8n) 확인 완료.
 - [x] **문서화**: `README.md` 링크 및 가이드 내용 확인 완료.
 

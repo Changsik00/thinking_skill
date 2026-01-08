@@ -3,11 +3,11 @@
     - Create `.gitignore`.
     - Verification: `ls -R` shows structure. (Done)
 
-- [x] **Task 2: Python Initialization**
-    - Remove `pyproject.toml` (switching to pip).
-    - Create `requirements.txt` with: `langchain`, `langgraph`, `langchain-google-genai`, `chromadb`, `python-dotenv`.
-    - Create `.env.example`.
-    - Verification: `pip install -r requirements.txt --dry-run` succeeds.
+- [x] **Task 2: Python Initialization (uv)**
+    - Run `uv init`.
+    - Run `uv add langchain langgraph langchain-google-genai chromadb python-dotenv`.
+    - Update `docs/setup-guide.md`.
+    - Verification: `uv sync` succeeds.
 
 - [x] **Task 3: Docker Orchestration**
     - Create `docker-compose.yml`.

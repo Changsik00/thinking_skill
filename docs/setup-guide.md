@@ -14,8 +14,9 @@
     # .env 파일을 열어 GEMINI_API_KEY 값을 입력하세요.
     ```
 3.  **Python 의존성 설치**:
+    MACS는 **uv**를 패키지 매니저로 사용합니다.
     ```bash
-    pip install -r requirements.txt
+    uv sync
     ```
 
 ## 3. 인프라 실행 (Running the Infrastructure)
