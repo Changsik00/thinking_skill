@@ -6,10 +6,10 @@
     - Implement `agents/state.py`.
     - Verification: `uv run python -c "from agents.state import AgentState"` succeeds.
 
-- [ ] **Task 3: Graph Implementation**
+- [x] **Task 3: Graph Implementation**
     - Implement `agents/graph.py`.
     - Verification: `uv run python -c "from agents.graph import graph"` succeeds (compilation check).
 
-- [ ] **Task 4: CLI Runner**
+- [/] **Task 4: CLI Runner**
     - Implement `main.py`.
     - Verification: `uv run main.py` runs a full dialogue loop.

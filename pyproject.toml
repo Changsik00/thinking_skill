@@ -4,4 +4,10 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9.6"
-dependencies = []
+dependencies = [
+    "chromadb>=1.4.0",
+    "langchain>=0.3.27",
+    "langchain-google-genai>=2.1.12",
+    "langgraph>=0.6.11",
+    "python-dotenv>=1.2.1",
+]
