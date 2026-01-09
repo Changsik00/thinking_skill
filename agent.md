@@ -96,11 +96,13 @@ No further action is allowed until the User selects a mode.
 
 Once SDD is selected:
 
-- Allowed: Clarifying questions, Spec drafting, Plan drafting.
+- Allowed: Clarifying questions, Spec drafting, Plan drafting (`plan.md`).
     
 - Forbidden: Code changes, Task execution, Commits.
     
 - Action: Wait until a Plan is explicitly accepted.
+    
+- **Documentation**: All Agent-generated docs (Docs, Spec, Plan) MUST be in **Korean**.
     
 
 ### 4.2 FF Mode
