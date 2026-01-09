@@ -51,6 +51,12 @@ uv run pytest
 ```
 Mock 기반의 유닛 테스트를 수행합니다.
 
+### 3.6. MCP Server 실행
+```bash
+uv run python app/interfaces/mcp_server.py
+```
+Obsidian/Claude Desktop 연동을 위한 MCP 서버를 실행합니다.
+
 ## 4. 폴더 구조 (Structure)
 ```
 app/
@@ -65,3 +71,4 @@ specs/                  # Development Specifications
 ## 5. Documentation
 - [Setup Guide](docs/setup-guide.md)
 - [Architecture Details](docs/architecture.md)
+- [MCP Guide](docs/mcp-guide.md)
