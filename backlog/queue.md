@@ -52,18 +52,29 @@ _Focus: Latency Optimization (SSE)._
 - [x] **UseCase Generator**: Yield results.
 - [x] **FastAPI SSE**: `StreamingResponse` endpoint.
 
-## 7. Phase 6: Advanced Interface (Web UI)
+## 7. Phase 6: Advanced Interface (Web UI) (Completed)
 _Focus: Frontend Integration (OpenWebUI)._
 
-- [ ] **OpenWebUI Setup**: Configure OpenWebUI connection.
-- [ ] **Full Test**: End-to-end test from Chat UI.
+- [x] **OpenWebUI Setup**: Configure OpenWebUI connection.
+- [x] **Full Test**: End-to-end test from Chat UI.
 
-## 8. Phase 7: CI/CD Pipeline
-_Focus: Automated Testing (DevOps)._
+## 8. Phase 7: Application Expansion (Utilization)
+_Focus: Practical Use Cases & Integration._
+
+- [x] **Obsidian Connection**:
+    - [x] Option A: Direct Save (Configured `OBSIDIAN_VAULT_PATH`).
+    - [ ] Option B: MCP Server (Allow Obsidian to query Thingking).
+- [ ] **Content Generator Mode (n8n Integration)**:
+    - **PPT Generator**: JSON output -> n8n -> Google Slides.
+    - **Reporting**: Weekly Summary -> n8n -> Email/Slack.
+    - **SNS Publishing**: Blog Post -> n8n -> WordPress/Twitter.
+    - Update `RunDebateUseCase` to output structured JSON for n8n.
+
+## 9. Phase 8: CI/CD & Reliability (Deferred)
+_Focus: DevOps & Quality Assurance._
 
 - [ ] **GitHub Actions**: Setup `.github/workflows/test.yml`.
 - [ ] **Unit Tests**: Trigger `pytest` on push (Free Tier).
-    - *Note*: Uses `FakeBrain`, so **Zero Token Consumption**.
 
 ## 9. Phase 8: Automated E2E Testing (Optional)
 _Focus: Reliability (Browser Automation)._
