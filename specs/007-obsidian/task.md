@@ -12,3 +12,7 @@
     - Manual Verify: Set path to a dummy folder.
     - Run debate via Web UI.
     - Check file creation.
+
+- [x] **Task 4: Selective Archiving** (Refinement)
+    - Update `RunDebateUseCase` to filter saves by keyword.
+    - Update `tests/unit/usecases/test_run_debate.py`.

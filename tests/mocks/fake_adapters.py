@@ -14,6 +14,11 @@ class FakeBrain(ThinkingBrain):
         self.last_topic = topic
         return self.response
 
+    async def think_stream(self, topic: str):
+        self.call_count += 1
+        self.last_topic = topic
+        yield self.response
+
 class FakeMemory(MemoryVault):
     def __init__(self):
         self.saved_items: List[DebateResult] = []
