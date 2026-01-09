@@ -26,14 +26,21 @@ _Focus: Connect the brain to the body (Automation & Memory)._
 - [x] **ChromaDB Connection**: Implement Python client to save vectors.
 - [x] **Archiving**: Logic to save discussion summary to Markdown/Obsidian.
 
-## 3. Future (Phase 4: Interface MVP)
-_Focus: User Experience._
+## 3. Future (Phase 4: Core Refactoring)
+_Focus: Clean Architecture & Foundation Strengthening._
 
-- [ ] **OpenWebUI Setup**: Configure OpenWebUI.
-- [ ] **API Exposure**: Expose LangGraph as an API (FastAPI) for OpenWebUI to consume.
+- [ ] **Domain Layer**: Define entities (Topic, DebateResult).
+- [ ] **Use Case Layer**: Encapsulate logic (RunDebateUseCase).
+- [ ] **Infra Layer**: Decouple LangGraph, Chroma, n8n.
+
+## 4. Future (Phase 5: Interface MVP)
+_Focus: User Experience (FastAPI + OpenWebUI)._
+
+- [ ] **FastAPI Server**: Implement modern generic API server.
+- [ ] **OpenWebUI Setup**: Configure OpenWebUI connection.
 - [ ] **Full Test**: End-to-end test from Chat UI.
 
-## 4. Icebox (Ideas & Enhancements)
+## 5. Icebox (Ideas & Enhancements)
 - [ ] Voice Interface (TTS/STT).
 - [ ] YouTube API Integration (Auto-upload).
 - [ ] Dashboard for vector DB visualization.
