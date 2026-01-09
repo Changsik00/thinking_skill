@@ -33,7 +33,14 @@ _Focus: Clean Architecture & Foundation Strengthening._
 - [ ] **Use Case Layer**: Encapsulate logic (RunDebateUseCase).
 - [ ] **Infra Layer**: Decouple LangGraph, Chroma, n8n.
 
-## 4. Future (Phase 5: Interface MVP)
+## 4. Phase 4.5: TDD Foundation
+_Focus: Reliability & Testability._
+
+- [ ] **Test Setup**: Configure `pytest`.
+- [ ] **Unit Tests**: Test `RunDebateUseCase` with Mock Adapters.
+- [ ] **Coverage**: Ensure core logic is covered.
+
+## 5. Future (Phase 5: Interface MVP)
 _Focus: User Experience (FastAPI + OpenWebUI)._
 
 - [ ] **FastAPI Server**: Implement modern generic API server.
