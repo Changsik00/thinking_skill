@@ -58,32 +58,40 @@ _Focus: Frontend Integration (OpenWebUI)._
 - [x] **OpenWebUI Setup**: Configure OpenWebUI connection.
 - [x] **Full Test**: End-to-end test from Chat UI.
 
-## 8. Phase 7: Application Expansion (Utilization)
-_Focus: Practical Use Cases & Integration._
+## 8. Phase 7: MCP Integration (Spec 008)
+_Focus: Context Connectivity (Obsidian & Tools)._
 
 - [x] **Obsidian Connection**:
     - [x] Option A: Direct Save (Configured `OBSIDIAN_VAULT_PATH`).
-    - [ ] Option B: MCP Server (Allow Obsidian to query Thingking).
-- [ ] **Content Generator Mode (n8n Integration)**:
+    - [x] Option B: MCP Server (Allow Obsidian to query Thingking).
+- [ ] **Data Synchronization Tools** (Follow-up):
+    - **Issue**: File deletion in Obsidian is not reflected in ChromaDB.
+    - **Idea 1**: `reindex_debates` tool (Manual Audit/Sync).
+    - **Idea 2**: File Watcher for real-time updates (Auto).
+
+## 9. Phase 8: Content Automation
+_Focus: Practical Application via n8n._
+
+- [ ] **Content Generator Mode**:
     - **PPT Generator**: JSON output -> n8n -> Google Slides.
     - **Reporting**: Weekly Summary -> n8n -> Email/Slack.
     - **SNS Publishing**: Blog Post -> n8n -> WordPress/Twitter.
     - Update `RunDebateUseCase` to output structured JSON for n8n.
 
-## 9. Phase 8: CI/CD & Reliability (Deferred)
+## 10. Phase 9: CI/CD & Reliability (Deferred)
 _Focus: DevOps & Quality Assurance._
 
 - [ ] **GitHub Actions**: Setup `.github/workflows/test.yml`.
 - [ ] **Unit Tests**: Trigger `pytest` on push (Free Tier).
 
-## 9. Phase 8: Automated E2E Testing (Optional)
+## 11. Phase 10: Automated E2E Testing (Optional)
 _Focus: Reliability (Browser Automation)._
 *Context: High setup cost/complexity vs value. Recommended for stable phase.*
 
 - [ ] **Playwright Setup**: Browser automation test.
 - [ ] **Login & Chat Test**: Automate user flow (Login -> Chat -> Check Response).
 
-## 10. Icebox (Ideas & Enhancements)
+## 12. Icebox (Ideas & Enhancements)
 - [ ] Voice Interface (TTS/STT).
 - [ ] YouTube API Integration (Auto-upload).
 - [ ] Dashboard for vector DB visualization.

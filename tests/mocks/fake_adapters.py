@@ -1,5 +1,5 @@
 # tests/mocks/fake_adapters.py
-from typing import List, Dict
+from typing import List, Dict, Optional
 from app.domain.interfaces import ThinkingBrain, MemoryVault, NerveSystem
 from app.domain.entities import DebateResult
 
@@ -26,6 +26,15 @@ class FakeMemory(MemoryVault):
     def save(self, result: DebateResult) -> str:
         self.saved_items.append(result)
         return f"/mock/path/{len(self.saved_items)}.md"
+
+    def list_debates(self, limit: int = 10) -> List[DebateResult]:
+        return self.saved_items[:limit]
+
+    def get_debate(self, topic: str) -> Optional[DebateResult]:
+        for item in self.saved_items:
+            if item.topic == topic:
+                return item
+        return None
 
 class FakeNerve(NerveSystem):
     def __init__(self):
