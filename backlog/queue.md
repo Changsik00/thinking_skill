@@ -29,9 +29,9 @@ _Focus: Connect the brain to the body (Automation & Memory)._
 ## 3. Future (Phase 4: Core Refactoring)
 _Focus: Clean Architecture & Foundation Strengthening._
 
-- [ ] **Domain Layer**: Define entities (Topic, DebateResult).
-- [ ] **Use Case Layer**: Encapsulate logic (RunDebateUseCase).
-- [ ] **Infra Layer**: Decouple LangGraph, Chroma, n8n.
+- [x] **Domain Layer**: Define entities (Topic, DebateResult).
+- [x] **Use Case Layer**: Encapsulate logic (RunDebateUseCase).
+- [x] **Infra Layer**: Decouple LangGraph, Chroma, n8n.
 
 ## 4. Phase 4.5: TDD Foundation
 _Focus: Reliability & Testability._
@@ -40,17 +40,25 @@ _Focus: Reliability & Testability._
 - [x] **Unit Tests**: Test `RunDebateUseCase` with Mock Adapters.
 - [x] **Coverage**: Ensure core logic is covered.
 
-## 5. Future (Phase 5: Interface MVP)
+## 5. Phase 5: Interface MVP (FastAPI)
 _Focus: User Experience (FastAPI + OpenWebUI)._
 
-- [ ] **FastAPI Server**: Implement modern generic API server.
+- [x] **FastAPI Server**: Implement modern generic API server.
 - [ ] **OpenWebUI Setup**: Configure OpenWebUI connection.
 - [ ] **Full Test**: End-to-end test from Chat UI.
 
-## 5. Icebox (Ideas & Enhancements)
-- [ ] Voice Interface (TTS/STT).
-- [ ] YouTube API Integration (Auto-upload).
-- [ ] Dashboard for vector DB visualization.
-- [ ] **Gemini 3 Migration**: Upgrade to `gemini-3-flash` and use `thinking_level`.
-- [ ] **Selective Archiving**: Allow user to say "Save this" during chat to trigger storage (requires Interface MVP).
-- [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container to `docker-compose.yml` for visual data inspection.
+## 6. Phase 5.5: Streaming Support
+_Focus: Latency Optimization (SSE)._
+
+- [ ] **LangGraph Stream**: Token-by-token generation.
+- [ ] **UseCase Generator**: Yield results.
+- [ ] **FastAPI SSE**: `StreamingResponse` endpoint.
+
+## 7. Future (Phase 6: Advanced Interface)
+_Focus: Web UI & CI/CD._
+
+- [ ] **Web UI**: OpenWebUI Integration.
+- [ ] **CI/CD Pipeline**: GitHub Actions for Unit Tests (Free Tier).
+    - Trigger `pytest` on push using `ubuntu-latest`.
+    - No Docker services needed for Unit/Mock tests.
+
