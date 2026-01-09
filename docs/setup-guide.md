@@ -62,8 +62,29 @@ n8n을 처음 실행하면 초기 설정이 필요합니다.
 ### 문제: Docker 연결 실패
 **에러**: `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
 **해결**:
-- **Docker Desktop** 앱이 실행 중인지 확인하세요.
-- macOS의 경우, 상단 메뉴바에 고래 아이콘이 있는지 확인하세요.
+- **macOS의 경우**, 상단 메뉴바에 고래 아이콘이 있는지 확인하세요.
+
+### 문제: 포트 충돌 및 컨테이너 업데이트
+`docker-compose.yml`이 변경되거나 포트가 바뀌었을 때는 기존 컨테이너를 내리고 다시 올려야 합니다.
+
+**재시작 명령어 (Clean Restart)**:
+```bash
+# 기존 컨테이너 중지 및 삭제
+docker compose down
+
+# 변경 사항 반영하여 다시 실행
+docker compose up -d
+```
+
+### 참고: 포트 맵 (Port Map)
+포트 충돌을 피하기 위해 다음과 같이 할당했습니다.
+
+| Service | Port | Description |
+| :--- | :--- | :--- |
+| **FastAPI** | `8000` | 메인 API 서버 (Host 실행) |
+| **ChromaDB** | `8001` | 벡터 데이터베이스 (Docker) |
+| **OpenWebUI** | `3000` | 채팅 웹 인터페이스 (Docker) |
+| **n8n** | `5678` | 워크플로우 자동화 (Docker) |
 
 ### 문제: 컨테이너 이름 충돌
 **에러**: `Conflict. The container name "/thingking-n8n-1" is already in use...`
