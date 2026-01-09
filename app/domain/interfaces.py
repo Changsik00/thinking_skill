@@ -1,6 +1,7 @@
 # app/domain/interfaces.py
 from abc import ABC, abstractmethod
-from typing import Optional
+from abc import ABC, abstractmethod
+from typing import List, Optional
 from app.domain.entities import DebateResult
 
 class ThinkingBrain(ABC):
@@ -29,6 +30,20 @@ class MemoryVault(ABC):
     def save(self, result: DebateResult) -> str:
         """
         Saves the debate result and returns a location identifier (e.g., file path or ID).
+        """
+        pass
+
+    @abstractmethod
+    def list_debates(self, limit: int = 10) -> List[DebateResult]:
+        """
+        Returns a list of recent debates.
+        """
+        pass
+
+    @abstractmethod
+    def get_debate(self, topic: str) -> Optional[DebateResult]:
+        """
+        Retrieves a specific debate by topic.
         """
         pass
 
