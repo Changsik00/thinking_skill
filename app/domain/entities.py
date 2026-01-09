@@ -10,5 +10,6 @@ class DebateResult:
     """
     topic: str
     content: str  # Final conclusion or summary
+    model: str = "macs-agent"
     created_at: str = field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     metadata: dict = field(default_factory=dict)
