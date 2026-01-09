@@ -10,27 +10,33 @@
 1.  **레포지토리 클론**: (이미 완료했다면 생략)
 2.  **환경 변수 설정**:
     ```bash
-    cp .env.example .env
-    # .env 파일을 열어 GEMINI_API_KEY 값을 입력하세요.
-    ```
-3.  **Python 의존성 설치**:
-    MACS는 **uv**를 패키지 매니저로 사용합니다.
-    ```bash
-    uv sync
-    ```
+    cp .env### 2. 환경 설정 (.env)
+`.env.example` 파일을 복사하여 `.env`를 생성하고 키를 입력하세요.
 
-## 3. 인프라 실행 (Running the Infrastructure)
-MACS는 행동 및 메모리 계층(Action & Memory)을 위해 Docker를 사용합니다.
+```bash
+cp .env.example .env
+```
 
+- `GEMINI_API_KEY`: Google AI Studio에서 발급받은 키.
+- `CHROMA_PORT`: **8001** (Docker 포트 충돌 방지용)
+- `N8N_WEBHOOK_URL`: n8n 웹훅 주소 (선택 사항)
+
+### 3. Running the Agent (실행 방법)
+
+**Step 1: Start Infrastructure (Docker)**
+DB(Chroma)와 UI(OpenWebUI), 자동화(n8n) 도구를 실행합니다.
 ```bash
 docker compose up -d
 ```
+- **OpenWebUI**: `http://localhost:3000` (채팅 인터페이스)
+- **n8n**: `http://localhost:5678` (워크플로우)
+- **ChromaDB**: `localhost:8001` (벡터 DB)
 
-서비스 실행 확인:
+**Step 2: Start API Server (FastAPI)**
 ```bash
-docker ps
-# 'chromadb/chroma' 와 'n8n' 컨테이너가 보여야 합니다.
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
+서버가 `http://localhost:8000` 에서 시작됩니다.
 
 
 ## 4. n8n 설정 (n8n Setup)

@@ -27,6 +27,29 @@ class OpenAIChatRequest(BaseModel):
     messages: List[Message]
     stream: Optional[bool] = False
 
+@router.get("/models")
+async def list_models():
+    """
+    Returns a list of available models for OpenWebUI.
+    """
+    return {
+        "object": "list",
+        "data": [
+            {
+                "id": "gemini-2.0-flash-001",
+                "object": "model",
+                "created": int(time.time()),
+                "owned_by": "macs"
+            },
+            {
+                "id": "macs-agent",
+                "object": "model",
+                "created": int(time.time()),
+                "owned_by": "macs"
+            }
+        ]
+    }
+
 # Stub for DI
 def get_run_debate_use_case() -> RunDebateUseCase:
     raise NotImplementedError("Dependency not injected")
