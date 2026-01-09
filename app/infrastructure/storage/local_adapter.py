@@ -11,7 +11,9 @@ class LocalAdapter(MemoryVault):
     Implementation of MemoryVault that saves to local filesystem and ChromaDB.
     """
     def __init__(self, archive_dir: str = "data/archives"):
-        self.archive_dir = archive_dir
+        # Prioritize Environment Variable -> Constructor Argument
+        env_path = os.getenv("OBSIDIAN_VAULT_PATH")
+        self.archive_dir = env_path if env_path else archive_dir
 
     def _sanitize_filename(self, name: str) -> str:
         return re.sub(r'[\\/*?:"<>|]', "", name).replace(" ", "_")
@@ -20,14 +22,20 @@ class LocalAdapter(MemoryVault):
         os.makedirs(self.archive_dir, exist_ok=True)
         
         safe_topic = self._sanitize_filename(result.topic)
-        # Using the created_at from result but sanitize it for filename if needed, 
-        # or just generate new timestamp for filename to avoid collisions?
-        # Let's use current time for filename to ensure uniqueness on save.
         filename_ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = f"{filename_ts}_{safe_topic}.md"
         file_path = os.path.join(self.archive_dir, filename)
         
-        markdown_content = f"""# Topic: {result.topic}
+        # YAML Frontmatter for Obsidian
+        markdown_content = f"""---
+type: debate
+topic: "{result.topic}"
+model: "{result.model}"
+date: {result.created_at}
+tags: [macs, agent, debate]
+---
+
+# Topic: {result.topic}
 Date: {result.created_at}
 
 ## Final Conclusion
