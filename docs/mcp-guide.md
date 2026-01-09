@@ -76,7 +76,7 @@ AI의 '책상(Context Window)'은 크기가 제한적입니다. 수천 개의 �
 
 ### 5.1. 서버 실행 (Standalone)
 ```bash
-uv run python app/interfaces/mcp_server.py
+uv run python -m app.interfaces.mcp_server
 ```
 
 ### 5.2. Claude Desktop 연동
@@ -90,8 +90,10 @@ uv run python app/interfaces/mcp_server.py
       "args": [
         "run",
         "python",
-        "/Users/ck/Project/Thingking/app/interfaces/mcp_server.py" // 절대 경로 필수
-      ]
+        "-m",
+        "app.interfaces.mcp_server"
+      ],
+      "cwd": "/Users/ck/Project/Thingking" // 절대 경로 필수 (프로젝트 루트)
     }
   }
 }
