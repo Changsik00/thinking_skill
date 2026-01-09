@@ -35,3 +35,31 @@ class RunDebateUseCase:
         self.nerve.trigger(result)
         
         return result
+
+    async def execute_stream(self, topic: str):
+        """
+        Orchestrates the debate in streaming mode.
+        Yields chunks as they are generated, then saves/triggers at the end.
+        """
+        print(f"\nThinking (Stream) about '{topic}'...\n")
+        
+        full_content = ""
+        
+        # 1. Stream from Brain
+        async for chunk in self.brain.think_stream(topic):
+            full_content += chunk
+            yield chunk
+            
+        # 2. Post-processing (same as execute)
+        result = DebateResult(topic=topic, content=full_content)
+        
+        # 3. Save to Memory
+        # Note: These are blocking calls, running in the event loop. 
+        # For a production system, these should be async or run_in_executor.
+        saved_path = self.memory.save(result)
+        result.metadata["saved_path"] = saved_path
+        print(f"\n[System]: Archived discussion to {saved_path}")
+        
+        # 4. Trigger Nervous System
+        self.nerve.trigger(result)
+

@@ -44,8 +44,6 @@ _Focus: Reliability & Testability._
 _Focus: User Experience (FastAPI + OpenWebUI)._
 
 - [x] **FastAPI Server**: Implement modern generic API server.
-- [ ] **OpenWebUI Setup**: Configure OpenWebUI connection.
-- [ ] **Full Test**: End-to-end test from Chat UI.
 
 ## 6. Phase 5.5: Streaming Support
 _Focus: Latency Optimization (SSE)._
@@ -54,11 +52,17 @@ _Focus: Latency Optimization (SSE)._
 - [ ] **UseCase Generator**: Yield results.
 - [ ] **FastAPI SSE**: `StreamingResponse` endpoint.
 
-## 7. Future (Phase 6: Advanced Interface)
+## 7. Phase 6: Advanced Interface (Web UI)
 _Focus: Web UI & CI/CD._
 
-- [ ] **Web UI**: OpenWebUI Integration.
+- [ ] **OpenWebUI Setup**: Configure OpenWebUI connection.
+- [ ] **Full Test**: End-to-end test from Chat UI.
 - [ ] **CI/CD Pipeline**: GitHub Actions for Unit Tests (Free Tier).
-    - Trigger `pytest` on push using `ubuntu-latest`.
-    - No Docker services needed for Unit/Mock tests.
 
+## 8. Icebox (Ideas & Enhancements)
+- [ ] Voice Interface (TTS/STT).
+- [ ] YouTube API Integration (Auto-upload).
+- [ ] Dashboard for vector DB visualization.
+- [ ] **Gemini 3 Migration**: Upgrade to `gemini-3-flash` and use `thinking_level`.
+- [ ] **Selective Archiving**: Allow user to say "Save this" during chat to trigger storage (requires Interface MVP).
+- [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container to `docker-compose.yml` for visual data inspection.

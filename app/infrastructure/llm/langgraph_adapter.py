@@ -70,3 +70,21 @@ class LangGraphBrain(ThinkingBrain):
         last_message = result["messages"][-1]
         
         return last_message.content
+
+    async def think_stream(self, topic: str):
+        """
+        Executes the graph and yields tokens from the LLM.
+        """
+        initial_state = {"messages": [HumanMessage(content=topic)]}
+        
+        # Use astream_events to get real-time tokens
+        # version="v1" is required for stability
+        async for event in self.graph.astream_events(initial_state, version="v1"):
+            kind = event["event"]
+            
+            # Filter for LLM streaming events
+            if kind == "on_chat_model_stream":
+                content = event["data"]["chunk"].content
+                if content:
+                    yield content
+

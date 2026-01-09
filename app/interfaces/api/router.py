@@ -1,5 +1,6 @@
 # app/interfaces/api/router.py
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from typing import Annotated
 
 from app.usecases.run_debate import RunDebateUseCase
@@ -29,3 +30,17 @@ def start_debate(
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/debates/stream")
+async def start_debate_stream(
+    request: DebateRequest,
+    use_case: Annotated[RunDebateUseCase, Depends(get_run_debate_use_case)]
+):
+    """
+    Starts a new debate and streams the content.
+    """
+    return StreamingResponse(
+        use_case.execute_stream(request.topic),
+        media_type="text/plain"
+    )
+
