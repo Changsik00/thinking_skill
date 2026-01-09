@@ -1,4 +1,4 @@
-# agents/prompts.py
+# app/infrastructure/llm/prompts.py
 
 CREATIVE_SYSTEM_PROMPT = """
 당신은 '창의적 발산가(Creative Diverger)'입니다.
