@@ -45,21 +45,34 @@ _Focus: User Experience (FastAPI + OpenWebUI)._
 
 - [x] **FastAPI Server**: Implement modern generic API server.
 
-## 6. Phase 5.5: Streaming Support
+## 6. Phase 5.5: Streaming Support (Completed)
 _Focus: Latency Optimization (SSE)._
 
-- [ ] **LangGraph Stream**: Token-by-token generation.
-- [ ] **UseCase Generator**: Yield results.
-- [ ] **FastAPI SSE**: `StreamingResponse` endpoint.
+- [x] **LangGraph Stream**: Token-by-token generation.
+- [x] **UseCase Generator**: Yield results.
+- [x] **FastAPI SSE**: `StreamingResponse` endpoint.
 
 ## 7. Phase 6: Advanced Interface (Web UI)
-_Focus: Web UI & CI/CD._
+_Focus: Frontend Integration (OpenWebUI)._
 
 - [ ] **OpenWebUI Setup**: Configure OpenWebUI connection.
 - [ ] **Full Test**: End-to-end test from Chat UI.
-- [ ] **CI/CD Pipeline**: GitHub Actions for Unit Tests (Free Tier).
 
-## 8. Icebox (Ideas & Enhancements)
+## 8. Phase 7: CI/CD Pipeline
+_Focus: Automated Testing (DevOps)._
+
+- [ ] **GitHub Actions**: Setup `.github/workflows/test.yml`.
+- [ ] **Unit Tests**: Trigger `pytest` on push (Free Tier).
+    - *Note*: Uses `FakeBrain`, so **Zero Token Consumption**.
+
+## 9. Phase 8: Automated E2E Testing (Optional)
+_Focus: Reliability (Browser Automation)._
+*Context: High setup cost/complexity vs value. Recommended for stable phase.*
+
+- [ ] **Playwright Setup**: Browser automation test.
+- [ ] **Login & Chat Test**: Automate user flow (Login -> Chat -> Check Response).
+
+## 10. Icebox (Ideas & Enhancements)
 - [ ] Voice Interface (TTS/STT).
 - [ ] YouTube API Integration (Auto-upload).
 - [ ] Dashboard for vector DB visualization.
