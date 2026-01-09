@@ -14,6 +14,13 @@ class ThinkingBrain(ABC):
         """
         pass
 
+    @abstractmethod
+    async def think_stream(self, topic: str):
+        """
+        Executes the thinking process and yields text chunks (AsyncIterator).
+        """
+        pass
+
 class MemoryVault(ABC):
     """
     Interface for 'Memory' storage.
