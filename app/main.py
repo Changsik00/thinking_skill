@@ -45,11 +45,16 @@ def get_use_case_implementation():
         nerve=state.nerve
     )
 
+from app.interfaces.api.openai_router import router as openai_router, get_run_debate_use_case as get_openai_use_case
+
 # Dependency Injection (Override Stub)
+# Note: Currently RunDebateUseCase is stateless per request, so reusing factory is fine.
 app.dependency_overrides[get_run_debate_use_case] = get_use_case_implementation
+app.dependency_overrides[get_openai_use_case] = get_use_case_implementation
 
 # Include Routers
 app.include_router(api_router)
+app.include_router(openai_router)
 
 @app.get("/")
 def health_check():
