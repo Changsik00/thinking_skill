@@ -40,6 +40,33 @@ graph TD
     - `api`: FastAPI Router 및 Schemas.
     - `cli`: 터미널 실행기.
 
+### 2.5. Streaming Architecture (Phase 5.5)
+**"Real-time Feedback Loop"**
+LLM의 긴 응답 시간을 극복하기 위해 **Async Generator Pattern**을 사용합니다.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API (FastAPI)
+    participant UseCase
+    participant Brain (LangGraph)
+    
+    Client->>API: POST /debates/stream
+    API->>UseCase: execute_stream()
+    UseCase->>Brain: think_stream()
+    
+    loop Every Token
+        Brain-->>UseCase: yield Token
+        UseCase-->>API: yield Token
+        API-->>Client: chunked response
+    end
+    
+    Note over UseCase: Aggregate Tokens -> Full Content
+    UseCase->>Memory: save(result)
+    UseCase->>Nerve: trigger(result)
+    API-->>Client: Stream End
+```
+
 ## 3. 개발 가이드 (Dev Guide)
 
 새로운 기능을 추가할 때는 **"안쪽에서 바깥쪽으로"** 개발하세요.
