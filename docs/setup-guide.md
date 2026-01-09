@@ -3,6 +3,7 @@
 ## 1. 사전 요구 사항 (Prerequisites)
 - **OS**: macOS (권장), Linux, 또는 Windows (WSL2)
 - **Python**: 3.11 버전 이상
+- **Package Manager**: [uv](https://github.com/astral-sh/uv) (강력 권장, 속도 및 의존성 관리 최적화)
 - **Docker**: Docker Desktop이 설치되어 있고 실행 중이어야 합니다.
 
 ## 2. 설치 (Installation)
@@ -35,8 +36,16 @@ docker compose up -d
 **Step 2: Start API Server (FastAPI)**
 ```bash
 uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+### 4. Testing (테스트 실행)
+`uv`를 사용하여 테스트를 실행합니다.
+
+```bash
+# 전체 테스트
+uv run pytest
+
+# 특정 테스트 파일 실행
+uv run pytest tests/unit/infrastructure/test_local_adapter.py
 ```
-서버가 `http://localhost:8000` 에서 시작됩니다.
 
 
 ## 4. n8n 설정 (n8n Setup)

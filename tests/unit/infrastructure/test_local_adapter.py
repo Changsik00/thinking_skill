@@ -54,3 +54,28 @@ def test_save_with_frontmatter(tmp_path, monkeypatch):
     assert "tags: [macs, agent, debate]" in content
     assert "---\n\n# Topic: AI Safety" in content
     assert "Debate Content Here" in content
+
+def test_save_with_long_filename_and_special_chars(tmp_path, monkeypatch):
+    """Test saving a file with very long topic and special characters."""
+    vault_path = tmp_path / "vault"
+    monkeypatch.setenv("OBSIDIAN_VAULT_PATH", str(vault_path))
+    adapter = LocalAdapter()
+    
+    # Topic with > 255 chars and special chars (newlines, slashes)
+    long_topic = "A" * 300 + "\n/\\:*?\"<>|" + "End"
+    
+    result = DebateResult(
+        topic=long_topic,
+        content="Content",
+        model="test",
+        created_at="now"
+    )
+    
+    # Should not raise OSError
+    file_path = adapter.save(result)
+    
+    assert os.path.exists(file_path)
+    filename = os.path.basename(file_path)
+    assert len(filename) < 255  # Standard filesystem limit
+    assert "\n" not in filename
+    assert "/" not in filename

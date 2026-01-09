@@ -16,7 +16,16 @@ class LocalAdapter(MemoryVault):
         self.archive_dir = env_path if env_path else archive_dir
 
     def _sanitize_filename(self, name: str) -> str:
-        return re.sub(r'[\\/*?:"<>|]', "", name).replace(" ", "_")
+        # Replace newlines and tabs with underscore
+        name = re.sub(r'[\n\t]', "_", name)
+        # Remove invalid chars for filesystem
+        name = re.sub(r'[\\/*?:"<>|]', "", name)
+        # Replace spaces with underscore
+        name = name.replace(" ", "_")
+        # Deduplicate underscores
+        name = re.sub(r'_+', "_", name)
+        # Truncate to safe length (100 chars)
+        return name[:100]
 
     def _save_to_markdown(self, result: DebateResult) -> str:
         os.makedirs(self.archive_dir, exist_ok=True)
