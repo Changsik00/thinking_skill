@@ -8,9 +8,15 @@
     ```bash
     docker compose up -d
     ```
-    *(이미 실행 중이라면 생략 가능)*
 
-2.  브라우저를 열고 다음 주소로 접속합니다:
+2.  **API 서버 실행 (FastAPI)**:
+    - **중요**: Docker가 접속할 수 있도록 `--host 0.0.0.0` 옵션이 필수입니다.
+    - 새 터미널을 열고 실행하세요:
+    ```bash
+    uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ```
+
+3.  브라우저를 열고 다음 주소로 접속합니다:
     - **URL**: [http://localhost:3000](http://localhost:3000)
 
 3.  **관리자 계정 생성 (First Admin)**:
