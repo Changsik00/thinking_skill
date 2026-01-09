@@ -8,7 +8,7 @@
     - Refactor `LocalAdapter.__init__`.
     - Enhance `_save_to_markdown` with Frontmatter.
 
-- [/] **Task 3: Verification**
+- [x] **Task 3: Verification**
     - Manual Verify: Set path to a dummy folder.
     - Run debate via Web UI.
     - Check file creation.
