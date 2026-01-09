@@ -79,3 +79,52 @@ def test_save_with_long_filename_and_special_chars(tmp_path, monkeypatch):
     assert len(filename) < 255  # Standard filesystem limit
     assert "\n" not in filename
     assert "/" not in filename
+
+def test_list_debates(tmp_path, monkeypatch):
+    """Test resolving list of debates from markdown files."""
+    vault_path = tmp_path / "vault"
+    vault_path.mkdir()
+    monkeypatch.setenv("OBSIDIAN_VAULT_PATH", str(vault_path))
+    adapter = LocalAdapter()
+
+    # Create dummy files
+    # File 1: Recent
+    (vault_path / "2024-01-02_Topic_B.md").write_text(
+        "---\ntopic: Topic B\nmodel: gpt-4\ndate: 2024-01-02\n---\n\nContent B"
+    )
+    # File 2: Older
+    (vault_path / "2024-01-01_Topic_A.md").write_text(
+        "---\ntopic: Topic A\nmodel: gpt-3\ndate: 2024-01-01\n---\n\nContent A"
+    )
+    # File 3: Not text (should be ignored)
+    (vault_path / "image.png").write_text("binary")
+
+    results = adapter.list_debates(limit=5)
+    
+    assert len(results) == 2
+    # Check order (Recent first because of filename sort desc)
+    assert results[0].topic == "Topic B"
+    assert results[1].topic == "Topic A"
+
+def test_get_debate(tmp_path, monkeypatch):
+    """Test retrieving a specific debate by topic."""
+    vault_path = tmp_path / "vault"
+    vault_path.mkdir()
+    monkeypatch.setenv("OBSIDIAN_VAULT_PATH", str(vault_path))
+    adapter = LocalAdapter()
+
+    # Create target file
+    filename = "2024-01-01_Target_Topic.md"
+    (vault_path / filename).write_text(
+        "---\ntopic: Target Topic\nmodel: gpt-4\ndate: 2024-01-01\n---\n\nFound Me"
+    )
+
+    # 1. Exact Name Search (simulated by sanitize matching)
+    result = adapter.get_debate("Target Topic")
+    assert result is not None
+    assert result.content == "Found Me"
+    assert result.topic == "Target Topic"
+
+    # 2. Not Found
+    result_none = adapter.get_debate("Non Existent")
+    assert result_none is None

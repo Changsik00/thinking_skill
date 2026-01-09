@@ -1,6 +1,7 @@
 # app/infrastructure/storage/local_adapter.py
 import os
 import re
+from typing import Optional, List
 from datetime import datetime
 import chromadb
 from app.domain.entities import DebateResult
@@ -74,6 +75,72 @@ Date: {result.created_at}
             print(f"[System]: Saved to ChromaDB (ID: {doc_id})")
         except Exception as e:
             print(f"[System]: Failed to save to ChromaDB: {e}")
+
+    def _parse_markdown_file(self, file_path: str) -> Optional[DebateResult]:
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            
+            # Simple frontmatter parser
+            parts = content.split("---", 2)
+            if len(parts) < 3:
+                return None # Invalid format
+            
+            frontmatter_str = parts[1]
+            body = parts[2].strip()
+            
+            metadata = {}
+            for line in frontmatter_str.split("\n"):
+                if ":" in line:
+                    key, val = line.split(":", 1)
+                    metadata[key.strip()] = val.strip().strip('"')
+            
+            return DebateResult(
+                topic=metadata.get("topic", "Unknown"),
+                content=body,
+                model=metadata.get("model", "Unknown"),
+                created_at=metadata.get("date", "")
+            )
+        except Exception:
+            return None
+
+    def list_debates(self, limit: int = 10) -> List[DebateResult]:
+        """
+        Returns a list of recent debates by scanning filenames in archive_dir.
+        Recent files first.
+        """
+        if not os.path.exists(self.archive_dir):
+            return []
+            
+        files = [f for f in os.listdir(self.archive_dir) if f.endswith(".md")]
+        files.sort(reverse=True) # Filenames start with timestamp, so string sort works for date desc
+        
+        results = []
+        for filename in files[:limit]:
+            result = self._parse_markdown_file(os.path.join(self.archive_dir, filename))
+            if result:
+                results.append(result)
+        return results
+
+    def get_debate(self, topic: str) -> Optional[DebateResult]:
+        """
+        Retrieves a specific debate by topic. 
+        Searches for the most recent file containing the sanitized topic string.
+        """
+        if not os.path.exists(self.archive_dir):
+            return None
+
+        # Sanitize input topic to match filename convention
+        safe_query = self._sanitize_filename(topic)
+        
+        files = [f for f in os.listdir(self.archive_dir) if f.endswith(".md")]
+        files.sort(reverse=True)
+        
+        for filename in files:
+            if safe_query in filename:
+                return self._parse_markdown_file(os.path.join(self.archive_dir, filename))
+        
+        return None
 
     def save(self, result: DebateResult) -> str:
         """
