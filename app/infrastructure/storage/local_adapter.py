@@ -40,7 +40,9 @@ Date: {result.created_at}
 
     def _save_to_chroma(self, result: DebateResult) -> None:
         try:
-            client = chromadb.HttpClient(host='localhost', port=8000)
+            host = os.getenv("CHROMA_HOST", "localhost")
+            port = int(os.getenv("CHROMA_PORT", 8000))
+            client = chromadb.HttpClient(host=host, port=port)
             collection = client.get_or_create_collection(name="macs_discussions")
             
             timestamp_id = datetime.now().strftime('%Y%m%d%H%M%S')

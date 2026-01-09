@@ -10,27 +10,33 @@
 1.  **레포지토리 클론**: (이미 완료했다면 생략)
 2.  **환경 변수 설정**:
     ```bash
-    cp .env.example .env
-    # .env 파일을 열어 GEMINI_API_KEY 값을 입력하세요.
-    ```
-3.  **Python 의존성 설치**:
-    MACS는 **uv**를 패키지 매니저로 사용합니다.
-    ```bash
-    uv sync
-    ```
+    cp .env### 2. 환경 설정 (.env)
+`.env.example` 파일을 복사하여 `.env`를 생성하고 키를 입력하세요.
 
-## 3. 인프라 실행 (Running the Infrastructure)
-MACS는 행동 및 메모리 계층(Action & Memory)을 위해 Docker를 사용합니다.
+```bash
+cp .env.example .env
+```
 
+- `GEMINI_API_KEY`: Google AI Studio에서 발급받은 키.
+- `CHROMA_PORT`: **8001** (Docker 포트 충돌 방지용)
+- `N8N_WEBHOOK_URL`: n8n 웹훅 주소 (선택 사항)
+
+### 3. Running the Agent (실행 방법)
+
+**Step 1: Start Infrastructure (Docker)**
+DB(Chroma)와 UI(OpenWebUI), 자동화(n8n) 도구를 실행합니다.
 ```bash
 docker compose up -d
 ```
+- **OpenWebUI**: `http://localhost:3000` (채팅 인터페이스)
+- **n8n**: `http://localhost:5678` (워크플로우)
+- **ChromaDB**: `localhost:8001` (벡터 DB)
 
-서비스 실행 확인:
+**Step 2: Start API Server (FastAPI)**
 ```bash
-docker ps
-# 'chromadb/chroma' 와 'n8n' 컨테이너가 보여야 합니다.
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
+서버가 `http://localhost:8000` 에서 시작됩니다.
 
 
 ## 4. n8n 설정 (n8n Setup)
@@ -56,8 +62,29 @@ n8n을 처음 실행하면 초기 설정이 필요합니다.
 ### 문제: Docker 연결 실패
 **에러**: `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
 **해결**:
-- **Docker Desktop** 앱이 실행 중인지 확인하세요.
-- macOS의 경우, 상단 메뉴바에 고래 아이콘이 있는지 확인하세요.
+- **macOS의 경우**, 상단 메뉴바에 고래 아이콘이 있는지 확인하세요.
+
+### 문제: 포트 충돌 및 컨테이너 업데이트
+`docker-compose.yml`이 변경되거나 포트가 바뀌었을 때는 기존 컨테이너를 내리고 다시 올려야 합니다.
+
+**재시작 명령어 (Clean Restart)**:
+```bash
+# 기존 컨테이너 중지 및 삭제
+docker compose down
+
+# 변경 사항 반영하여 다시 실행
+docker compose up -d
+```
+
+### 참고: 포트 맵 (Port Map)
+포트 충돌을 피하기 위해 다음과 같이 할당했습니다.
+
+| Service | Port | Description |
+| :--- | :--- | :--- |
+| **FastAPI** | `8000` | 메인 API 서버 (Host 실행) |
+| **ChromaDB** | `8001` | 벡터 데이터베이스 (Docker) |
+| **OpenWebUI** | `3000` | 채팅 웹 인터페이스 (Docker) |
+| **n8n** | `5678` | 워크플로우 자동화 (Docker) |
 
 ### 문제: 컨테이너 이름 충돌
 **에러**: `Conflict. The container name "/thingking-n8n-1" is already in use...`
