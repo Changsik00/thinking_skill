@@ -36,9 +36,9 @@ _Focus: Clean Architecture & Foundation Strengthening._
 ## 4. Phase 4.5: TDD Foundation
 _Focus: Reliability & Testability._
 
-- [ ] **Test Setup**: Configure `pytest`.
-- [ ] **Unit Tests**: Test `RunDebateUseCase` with Mock Adapters.
-- [ ] **Coverage**: Ensure core logic is covered.
+- [x] **Test Setup**: Configure `pytest`.
+- [x] **Unit Tests**: Test `RunDebateUseCase` with Mock Adapters.
+- [x] **Coverage**: Ensure core logic is covered.
 
 ## 5. Future (Phase 5: Interface MVP)
 _Focus: User Experience (FastAPI + OpenWebUI)._
