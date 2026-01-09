@@ -1,0 +1,56 @@
+# app/main.py
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
+from app.domain.interfaces import ThinkingBrain, MemoryVault, NerveSystem
+from app.infrastructure.llm.langgraph_adapter import LangGraphBrain
+from app.infrastructure.storage.local_adapter import LocalAdapter
+from app.infrastructure.automation.n8n_adapter import N8nAdapter
+from app.usecases.run_debate import RunDebateUseCase
+from app.interfaces.api.router import router as api_router, get_run_debate_use_case
+
+# Global State for Dependencies
+class AppState:
+    brain: ThinkingBrain = None
+    memory: MemoryVault = None
+    nerve: NerveSystem = None
+
+state = AppState()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Initialize Adapters
+    print("[System]: Initializing dependencies...")
+    state.brain = LangGraphBrain(model_name="gemini-2.0-flash-001")
+    state.memory = LocalAdapter(archive_dir="data/archives")
+    state.nerve = N8nAdapter()
+    print("[System]: Dependencies initialized.")
+    yield
+    # Shutdown: Cleanup if needed
+    print("[System]: Shutting down.")
+
+app = FastAPI(
+    title="MACS: Multi-Agent Creative Studio",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# Dependency Factory
+def get_use_case_implementation():
+    if not (state.brain and state.memory and state.nerve):
+        raise RuntimeError("Application state not initialized")
+    return RunDebateUseCase(
+        brain=state.brain,
+        memory=state.memory,
+        nerve=state.nerve
+    )
+
+# Dependency Injection (Override Stub)
+app.dependency_overrides[get_run_debate_use_case] = get_use_case_implementation
+
+# Include Routers
+app.include_router(api_router)
+
+@app.get("/")
+def health_check():
+    return {"status": "ok", "message": "MACS Server is running"}
