@@ -25,7 +25,26 @@
 *   **AI의 동작**: `search_debates(query="철학적 좀비")` 도구를 실행합니다. (함수 호출)
 *   **결과**: AI가 수많은 파일 중 해당 단어가 포함된 부분을 찾아내어 요약해 줍니다.
 
-## 3. Architecture & Mechanics
+- **결과**: AI가 수많은 파일 중 해당 단어가 포함된 부분을 찾아내어 요약해 줍니다.
+
+## 3. 핵심 개념 (Core Concepts)
+
+### 3.1. 왜 별도의 서버(SSE)가 필요한가요?
+보통의 MCP 서버(Stdio)는 Claude Desktop 같은 로컬 앱이 **직접 실행**합니다. 하지만 **OpenWebUI**는 Docker라는 격리된 공간(가상의 다른 컴퓨터)에 있습니다.
+그래서 마치 **"인터넷 전화선"**을 연결하듯, **SSE (Server-Sent Events) 방식**으로 호스트(내 맥북)에 있는 서버와 연결해야 합니다.
+
+### 3.2. 누가 판단하고 누가 실행하나요? (The Execution Flow)
+가장 혼동하기 쉬운 부분입니다. **"판단(Reasoning)"**과 **"실행(Execution)"**은 분리되어 있습니다.
+
+1.  **OpenWebUI (Client)**: 사용자의 말을 LLM에게 전달하는 **메신저**입니다.
+2.  **LLM (Brain)**: 사용자의 말을 듣고 **"판단"**합니다.
+    *   *"사용자가 저장을 원하네? `save_debate` 도구를 써야겠다!"* (결정)
+3.  **Thingking MCP (Hand)**: LLM의 결정을 전달받아 **"실행"**합니다.
+    *   *실제 파일 생성 및 DB 저장은 여기서(FastAPI/Uvicorn) 일어납니다.*
+
+즉, **FastAPI(Thingking)**는 알아서 판단하는 주체가 아니라, **LLM이 시킨 일을 수행하는 충실한 손발**입니다.
+
+## 4. Architecture & Mechanics
 
 Thingking MCP 시스템의 구조와 동작 원리입니다.
 
@@ -99,3 +118,26 @@ uv run python -m app.interfaces.mcp_server
 }
 ```
 설정 후 Claude Desktop을 재시작하면 🔌 아이콘이 활성화됩니다.
+
+## 6. OpenWebUI 연동 (Docker)
+Docker 환경에서 실행되는 OpenWebUI와 연동하려면 SSE 모드를 사용해야 합니다.
+
+### 6.1. SSE 모드로 서버 실행
+```bash
+uv run python -m app.interfaces.mcp_server --sse
+```
+- 주소: `http://0.0.0.0:8000/sse`
+- **주의**: `0.0.0.0`으로 실행되므로 신뢰할 수 있는 로컬 네트워크에서만 사용하세요.
+
+### 6.2. OpenWebUI 설정
+1. OpenWebUI **관리자 패널 (Admin Panel)**에 접속합니다.
+2. **Settings (설정) > Connections** 메뉴로 이동합니다.
+3. **MCP Servers** 섹션에서 `+` 버튼을 클릭합니다.
+4. 다음 정보를 입력합니다:
+    - **URL**: `http://host.docker.internal:8000/sse`
+    - *참고: Mac/Windows Docker Desktop 사용자는 `host.docker.internal`을 사용합니다. Linux 사용자는 `172.17.0.1` 또는 호스트 IP를 사용하세요.*
+5. **Verify/Save** 버튼을 누릅니다. (Status가 초록색으로 변해야 합니다)
+
+### 6.3. 기능 사용
+- **검색**: 채팅창에서 `@thingking`을 멘션하거나, 도구를 활성화한 후 "지난번 토론 찾아줘"라고 입력.
+- **저장**: "방금 대화 내용 저장해줘"라고 입력하면 `save_debate` 도구가 실행되어 로컬 파일로 저장됩니다.

@@ -1,6 +1,7 @@
 from mcp.server.fastmcp import FastMCP, Context
 from app.infrastructure.storage.local_adapter import LocalAdapter
 from app.usecases.manage_debates import ListDebatesUseCase, GetDebateUseCase
+from app.domain.entities import DebateResult
 
 # Initialize Server
 mcp = FastMCP("thingking")
@@ -60,5 +61,23 @@ async def search_debates(query: str, ctx: Context) -> str:
     
     return "\n".join(lines)
 
+@mcp.tool()
+async def save_debate(topic: str, content: str) -> str:
+    """Save a debate or conversation with a specific topic and content.
+    Useful when you want to persist the current discussion or an analysis result.
+    """
+    try:
+        result = DebateResult(topic=topic, content=content)
+        path = adapter.save(result)
+        return f"Successfully saved to {path}"
+    except Exception as e:
+        return f"Failed to save debate. Error: {str(e)}"
+
 if __name__ == "__main__":
-    mcp.run()
+    import sys
+    if "--sse" in sys.argv:
+        import uvicorn
+        print("Starting MCP Server in SSE mode on http://0.0.0.0:8000/sse")
+        uvicorn.run(mcp.sse_app, host="0.0.0.0", port=8000)
+    else:
+        mcp.run()
