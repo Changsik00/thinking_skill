@@ -26,6 +26,20 @@ services:
     networks:
       - macs-network
 
+  mcpo:
+    image: ghcr.io/open-webui/mcpo:main
+    command: --config /app/config.json --host 0.0.0.0 --port 8000
+    ports:
+      - "3001:8000"
+    volumes:
+      - ./config/mcpo.json:/app/config.json
+    environment:
+      - MACS_MCP_URL=http://host.docker.internal:8000/mcp/sse
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - macs-network
+
   n8n:
     image: docker.n8n.io/n8nio/n8n
     ports:
