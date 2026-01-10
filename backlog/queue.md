@@ -64,10 +64,11 @@ _Focus: Context Connectivity (Obsidian & Tools)._
 - [x] **Obsidian Connection**:
     - [x] Option A: Direct Save (Configured `OBSIDIAN_VAULT_PATH`).
     - [x] Option B: MCP Server (Allow Obsidian to query Thingking).
-- [ ] **OpenWebUI Connection (SSE Mode)** (M-Extension):
-    - **Goal**: Allow Dockerized OpenWebUI to access Local MCP Server.
-    - **Method**: Implement SSE (Server-Sent Events) transport in `mcp_server.py`.
-    - **Config**: Register `http://host.docker.internal:8000/sse` in OpenWebUI.
+- [ ] **OpenWebUI Connection (OpenAPI Bridge Mode)** (Spec 010):
+    - **Goal**: Integrate Dockerized OpenWebUI with Local MCP Server via `mcpo` proxy.
+    - **Reason**: Native MCP UI is missing/unstable; `mcpo` provides robust OpenAPI-based connection.
+    - **Method**: Add `mcpo` service to `docker-compose.yml`.
+    - **Config**: Register `http://host.docker.internal:8000/sse` in `config.json` via volume.
 - [ ] **Data Synchronization Tools** (Follow-up):
     - **Issue**: File deletion in Obsidian is not reflected in ChromaDB.
     - **Idea 1**: `reindex_debates` tool (Manual Audit/Sync).
