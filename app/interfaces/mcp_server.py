@@ -66,9 +66,12 @@ async def save_debate(topic: str, content: str) -> str:
     """Save a debate or conversation with a specific topic and content.
     Useful when you want to persist the current discussion or an analysis result.
     """
-    result = DebateResult(topic=topic, content=content)
-    path = adapter.save(result)
-    return f"Successfully saved to {path}"
+    try:
+        result = DebateResult(topic=topic, content=content)
+        path = adapter.save(result)
+        return f"Successfully saved to {path}"
+    except Exception as e:
+        return f"Failed to save debate. Error: {str(e)}"
 
 if __name__ == "__main__":
     import sys

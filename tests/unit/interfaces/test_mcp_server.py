@@ -33,3 +33,17 @@ async def test_save_debate_tool():
         assert isinstance(saved_entity, DebateResult)
         assert saved_entity.topic == topic
         assert saved_entity.content == content
+
+@pytest.mark.asyncio
+async def test_save_debate_tool_failure():
+    """Verify save_debate returns error message on exception."""
+    with patch("app.interfaces.mcp_server.adapter") as mock_adapter:
+        # Simulate an error (e.g., Disk Full)
+        mock_adapter.save.side_effect = OSError("Disk Full")
+        
+        from app.interfaces.mcp_server import save_debate
+        
+        result = await save_debate(topic="Fail", content="Content")
+        
+        assert "Failed to save debate" in result
+        assert "Disk Full" in result
