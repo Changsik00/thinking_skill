@@ -99,3 +99,26 @@ uv run python -m app.interfaces.mcp_server
 }
 ```
 설정 후 Claude Desktop을 재시작하면 🔌 아이콘이 활성화됩니다.
+
+## 6. OpenWebUI 연동 (Docker)
+Docker 환경에서 실행되는 OpenWebUI와 연동하려면 SSE 모드를 사용해야 합니다.
+
+### 6.1. SSE 모드로 서버 실행
+```bash
+uv run python -m app.interfaces.mcp_server --sse
+```
+- 주소: `http://0.0.0.0:8000/sse`
+- **주의**: `0.0.0.0`으로 실행되므로 신뢰할 수 있는 로컬 네트워크에서만 사용하세요.
+
+### 6.2. OpenWebUI 설정
+1. OpenWebUI **관리자 패널 (Admin Panel)**에 접속합니다.
+2. **Settings (설정) > Connections** 메뉴로 이동합니다.
+3. **MCP Servers** 섹션에서 `+` 버튼을 클릭합니다.
+4. 다음 정보를 입력합니다:
+    - **URL**: `http://host.docker.internal:8000/sse`
+    - *참고: Mac/Windows Docker Desktop 사용자는 `host.docker.internal`을 사용합니다. Linux 사용자는 `172.17.0.1` 또는 호스트 IP를 사용하세요.*
+5. **Verify/Save** 버튼을 누릅니다. (Status가 초록색으로 변해야 합니다)
+
+### 6.3. 기능 사용
+- **검색**: 채팅창에서 `@thingking`을 멘션하거나, 도구를 활성화한 후 "지난번 토론 찾아줘"라고 입력.
+- **저장**: "방금 대화 내용 저장해줘"라고 입력하면 `save_debate` 도구가 실행되어 로컬 파일로 저장됩니다.

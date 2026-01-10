@@ -1,19 +1,23 @@
-## 목적 (Goal)
-**Spec 008: MCP (Model Context Protocol) 서버 통합**을 구현했습니다.
-이를 통해 AI 에이전트(Claude Desktop 등)가 "Thingking"의 토론 데이터를 컨텍스트로 직접 조회할 수 있게 됩니다.
+# Spec 009: OpenWebUI Integration & Selective Save Tool
 
-## 변경 사항 (Changes)
-- **Domain Layer**: `MemoryVault` 인터페이스에 `list_debates`, `get_debate` 추가.
-- **Infrastructure**: `LocalAdapter`에 마크다운 파싱 및 조회 로직 구현.
-- **Use Case**: `ManageDebatesUseCase` (`ListDebates`, `GetDebate`) 추가.
-- **Interface**: `app/interfaces/mcp_server.py` 생성 (`FastMCP` 사용).
-    - **Resources**: `debate://list`, `debate://{topic}`
-    - **Tools**: `search_debates(query)`
-- **Documentation**: `docs/mcp-guide.md` 추가 및 `README.md` 업데이트.
-- **Backlog**: `backlog/queue.md` 정리 (Sync Tool 관련 후속 태스크 추가).
+## 개요
+이 PR은 Docker 환경의 **OpenWebUI**와 로컬 MCP 서버 간의 연동을 위한 **SSE 모드**를 구현하고, 대화 내용을 저장할 수 있는 **선택적 저장 도구(`save_debate`)**를 추가합니다.
+
+## 변경 사항
+### 1. Save Tool 추가 (`app/interfaces/mcp_server.py`)
+- `save_debate(topic, content)` 도구를 추가하여 에이전트가 대화 내용을 파일/DB에 저장할 수 있도록 함.
+- 기존 `LocalAdapter.save` 로직 재사용.
+- **테스트**: `test_save_debate_tool` 추가.
+
+### 2. SSE 모드 지원 (`app/interfaces/mcp_server.py`)
+- `--sse` 플래그를 통해 `uvicorn` 기반의 SSE 서버 실행 모드 추가.
+- `uv run python -m app.interfaces.mcp_server --sse` 명령으로 실행.
+- 호스트 바인딩: `0.0.0.0` (Docker 접근 허용).
+
+### 3. 문서화 (`docs/mcp-guide.md`)
+- OpenWebUI 연동 가이드 추가.
+- Docker Host 연결 설정 방법 기술.
 
 ## 검증 (Verification)
-- **Unit Tests**: `tests/unit/usecases/test_manage_debates.py` 및 `tests/unit/interfaces/test_mcp_server.py` 추가. 총 13개 테스트 통과.
-- **Manual Verification**: PR 리뷰 시 수행 위임.
-    - 서버 실행: `uv run python -m app.interfaces.mcp_server`
-    - `mcp-inspector` 또는 Claude Desktop에서 확인.
+- **Unit Test**: `uv run pytest` (Save Tool 동작 확인 완료).
+- **Manual Verification**: `scripts/verify_sse.py`를 통해 SSE 엔드포인트(`http://localhost:8000/sse`) 응답 확인 완료 (Status 200).
