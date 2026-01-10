@@ -27,15 +27,16 @@ class RunDebateUseCase:
         result = DebateResult(topic=topic, content=content)
         
         # 3. Save to Memory (Conditional)
-        keywords = ["저장", "save", "archive", "기록"]
-        should_save = any(k in topic.lower() for k in keywords)
-        
-        if should_save:
-            saved_path = self.memory.save(result)
-            result.metadata["saved_path"] = saved_path
-            print(f"\n[System]: Archived discussion to {saved_path}")
-        else:
-            print(f"\n[System]: Topic '{topic}' does not contain save keywords. Skipping archive.")
+        # 3. Save to Memory (Conditional) - DISABLED in Spec 009
+        # keywords = ["저장", "save", "archive", "기록"]
+        # should_save = any(k in topic.lower() for k in keywords)
+        # 
+        # if should_save:
+        #     saved_path = self.memory.save(result)
+        #     result.metadata["saved_path"] = saved_path
+        #     print(f"\n[System]: Archived discussion to {saved_path}")
+        # else:
+        #     print(f"\n[System]: Topic '{topic}' does not contain save keywords. Skipping archive.")
         
         # 4. Trigger Nervous System (Automation)
         self.nerve.trigger(result)
@@ -61,17 +62,18 @@ class RunDebateUseCase:
         
         # 3. Save to Memory (Conditional)
         # Only save if topic explicitly requests it (Selective Archiving)
-        keywords = ["저장", "save", "archive", "기록"]
-        should_save = any(k in topic.lower() for k in keywords)
-
-        if should_save:
-            # Note: These are blocking calls, running in the event loop. 
-            # For a production system, these should be async or run_in_executor.
-            saved_path = self.memory.save(result)
-            result.metadata["saved_path"] = saved_path
-            print(f"\n[System]: Archived discussion to {saved_path}")
-        else:
-            print(f"\n[System]: Topic '{topic}' does not contain save keywords. Skipping archive.")
+        # 3. Save to Memory (Conditional) - DISABLED in Spec 009
+        # keywords = ["저장", "save", "archive", "기록"]
+        # should_save = any(k in topic.lower() for k in keywords)
+        # 
+        # if should_save:
+        #     # Note: These are blocking calls, running in the event loop. 
+        #     # For a production system, these should be async or run_in_executor.
+        #     saved_path = self.memory.save(result)
+        #     result.metadata["saved_path"] = saved_path
+        #     print(f"\n[System]: Archived discussion to {saved_path}")
+        # else:
+        #     print(f"\n[System]: Topic '{topic}' does not contain save keywords. Skipping archive.")
         
         # 4. Trigger Nervous System
         self.nerve.trigger(result)

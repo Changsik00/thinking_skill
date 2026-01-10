@@ -3,8 +3,15 @@ from app.infrastructure.storage.local_adapter import LocalAdapter
 from app.usecases.manage_debates import ListDebatesUseCase, GetDebateUseCase
 from app.domain.entities import DebateResult
 
+# Imports for Combined Server (LLM + MCP)
+from fastapi import FastAPI
+from app.interfaces.api.openai_router import router as openai_router, get_run_debate_use_case
+from app.infrastructure.llm.langgraph_adapter import LangGraphBrain
+from app.infrastructure.automation.n8n_adapter import N8nAdapter
+from app.usecases.run_debate import RunDebateUseCase
+
 # Initialize Server
-mcp = FastMCP("thingking")
+mcp = FastMCP("thingking", host="0.0.0.0")
 
 # Dependency Injection
 # Note: In a production app, we might use a DI container. 
@@ -73,11 +80,48 @@ async def save_debate(topic: str, content: str) -> str:
     except Exception as e:
         return f"Failed to save debate. Error: {str(e)}"
 
+def create_combined_app() -> FastAPI:
+    """
+    Creates a combined FastAPI app that serves both:
+    1. MCP Server (SSE) at /sse
+    2. OpenAI Compatible API at /openai/v1
+    """
+    app = FastAPI(title="Thingking Unified Server")
+    
+    # 1. Mount MCP SSE App
+    # FastMCP's sse_app is a Starlette/FastAPI compatible app
+    app.mount("/sse", mcp.sse_app)
+    
+    # 2. Setup Dependencies for OpenAI Router
+    # We need to initialize the full stack (Brain + Nerve + Vault)
+    brain = LangGraphBrain()
+    nerve = N8nAdapter()
+    vault = LocalAdapter()
+    
+    run_debate_use_case = RunDebateUseCase(
+        brain=brain,
+        memory=vault,
+        nerve=nerve
+    )
+    
+    # Override dependency
+    app.dependency_overrides[get_run_debate_use_case] = lambda: run_debate_use_case
+    
+    # 3. Include OpenAI Router
+    app.include_router(openai_router)
+    
+    return app
+
 if __name__ == "__main__":
     import sys
     if "--sse" in sys.argv:
         import uvicorn
-        print("Starting MCP Server in SSE mode on http://0.0.0.0:8000/sse")
-        uvicorn.run(mcp.sse_app, host="0.0.0.0", port=8000)
+        print("Starting Unified Server (MCP + OpenAI) on http://0.0.0.0:8000")
+        print("- MCP SSE: http://0.0.0.0:8000/sse")
+        print("- OpenAI API: http://0.0.0.0:8000/openai/v1")
+        
+        # Run the combined app
+        combined_app = create_combined_app()
+        uvicorn.run(combined_app, host="0.0.0.0", port=8000)
     else:
         mcp.run()
