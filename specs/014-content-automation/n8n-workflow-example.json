@@ -1,0 +1,124 @@
+{
+  "name": "Thingking Content Automation Example",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Thingking Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.body.target }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "slack",
+              "output": 0
+            },
+            {
+              "value2": "email",
+              "output": 1
+            }
+          ]
+        },
+        "fallbackOutput": 2
+      },
+      "id": "switch-target",
+      "name": "Route by Target",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "message": "SENDING TO SLACK\nTopic: {{ $json.body.topic }}\nSummary: {{ $json.body.summary }}"
+      },
+      "id": "slack-mock",
+      "name": "Mock Slack Action",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        700,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "message": "SENDING EMAIL\nSubject: {{ $json.body.topic }}"
+      },
+      "id": "email-mock",
+      "name": "Mock Email Action",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "message": "UNKNOWN TARGET\nLogging payload..."
+      },
+      "id": "default-log",
+      "name": "Log Default",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        700,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "Thingking Webhook": {
+      "main": [
+        [
+          {
+            "node": "Route by Target",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Target": {
+      "main": [
+        [
+          {
+            "node": "Mock Slack Action",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mock Email Action",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Default",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

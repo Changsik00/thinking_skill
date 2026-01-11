@@ -14,19 +14,16 @@ _Items promoted to Spec or currently under discussion._
     - `sync_debates` tool implemented.
 - [x] **Spec 012: Model Upgrade**
     - Gemini 3 / Dynamic Model Selection implemented.
-- [ ] **Spec 013: Selective Archiving (Smart Save)**
+- [x] **Spec 013: Selective Archiving (Smart Save)**
     - **Goal**: Disable auto-save; allow Agent to save only when requested or valuable.
     - **Method**: Modify `RunDebateUseCase` and ensure `save_debate` tool is effectively used by the Brain.
 
-## 1. Next (Phase 8: Content Automation)
-_Focus: Practical Application via n8n._
+- [ ] **Spec 014: Content Automation (n8n)**
+    - **Goal**: Trigger external workflows (e.g., Slack, Blog) via n8n.
+    - **Scope**: `N8nAdapter` update, `trigger_automation` tool, Local Verification.
 
-- [ ] **Content Generator Mode**:
-    - **PPT Generator**: JSON output -> n8n -> Google Slides.
-    - **Reporting**: Weekly Summary -> n8n -> Email/Slack.
-    - **SNS Publishing**: Blog Post -> n8n -> WordPress/Twitter.
-
-## 2. Later (Phase 9: Reliability)
+## 1. Next (Phase 9: Reliability)
+_Focus: DevOps & Quality Assurance._
 _Focus: DevOps & Quality Assurance._
 
 - [ ] **GitHub Actions**: Setup `.github/workflows/test.yml`.
