@@ -56,6 +56,9 @@ app.dependency_overrides[get_openai_use_case] = get_use_case_implementation
 app.include_router(api_router)
 app.include_router(openai_router)
 
-@app.get("/")
-def health_check():
-    return {"status": "ok", "message": "MACS Server is running"}
+# [Spec 009] Mount MCP SSE Application
+# We mount at '/mcp' so the endpoints become:
+# - SSE: /mcp/sse
+# - Messages: /mcp/messages
+from app.interfaces.mcp_server import mcp
+app.mount("/mcp", mcp.sse_app())

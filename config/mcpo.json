@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "thingking": {
+      "url": "http://host.docker.internal:8000/mcp/sse"
+    }
+  }
+}
