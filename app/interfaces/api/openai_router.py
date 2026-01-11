@@ -31,21 +31,34 @@ class OpenAIChatRequest(BaseModel):
 async def list_models():
     """
     Returns a list of available models for OpenWebUI.
+    Updated with modern Gemini models.
     """
     return {
         "object": "list",
         "data": [
             {
+                "id": "gemini-2.0-flash-thinking-exp-1219",
+                "object": "model",
+                "created": int(time.time()),
+                "owned_by": "google"
+            },
+            {
                 "id": "gemini-2.0-flash-001",
                 "object": "model",
                 "created": int(time.time()),
-                "owned_by": "macs"
+                "owned_by": "google"
             },
             {
-                "id": "macs-agent",
+                "id": "gemini-1.5-flash",
                 "object": "model",
                 "created": int(time.time()),
-                "owned_by": "macs"
+                "owned_by": "google"
+            },
+            {
+                "id": "gemini-1.5-pro",
+                "object": "model",
+                "created": int(time.time()),
+                "owned_by": "google"
             }
         ]
     }
@@ -74,8 +87,8 @@ async def chat_completions(
     created = int(time.time())
     
     async def sse_generator():
-        # Stream from UseCase
-        async for chunk in use_case.execute_stream(topic):
+        # Stream from UseCase with Dynamic Model Selection
+        async for chunk in use_case.execute_stream(topic, model_name=request.model):
             # Format as OpenAI Delta
             chunk_data = {
                 "id": chat_id,

@@ -17,14 +17,14 @@ class RunDebateUseCase:
         self.memory = memory
         self.nerve = nerve
 
-    def execute(self, topic: str) -> DebateResult:
-        print(f"\nThinking about '{topic}'...\n")
+    def execute(self, topic: str, model_name: str = None) -> DebateResult:
+        print(f"\nThinking about '{topic}' (Model: {model_name or 'Default'})...\n")
         
         # 1. Ask the Brain to think (Core Logic)
-        content = self.brain.think(topic)
+        content = self.brain.think(topic, model_name=model_name)
         
         # 2. Create Domain Entity
-        result = DebateResult(topic=topic, content=content)
+        result = DebateResult(topic=topic, content=content, model=model_name or "Default")
         
         # 3. Save to Memory (Conditional)
         # 3. Save to Memory (Conditional) - DISABLED in Spec 009
@@ -43,22 +43,22 @@ class RunDebateUseCase:
         
         return result
 
-    async def execute_stream(self, topic: str):
+    async def execute_stream(self, topic: str, model_name: str = None):
         """
         Orchestrates the debate in streaming mode.
         Yields chunks as they are generated, then saves/triggers at the end.
         """
-        print(f"\nThinking (Stream) about '{topic}'...\n")
+        print(f"\nThinking (Stream) about '{topic}' (Model: {model_name or 'Default'})...\n")
         
         full_content = ""
         
         # 1. Stream from Brain
-        async for chunk in self.brain.think_stream(topic):
+        async for chunk in self.brain.think_stream(topic, model_name=model_name):
             full_content += chunk
             yield chunk
             
         # 2. Post-processing (same as execute)
-        result = DebateResult(topic=topic, content=full_content)
+        result = DebateResult(topic=topic, content=full_content, model=model_name or "Default")
         
         # 3. Save to Memory (Conditional)
         # Only save if topic explicitly requests it (Selective Archiving)
