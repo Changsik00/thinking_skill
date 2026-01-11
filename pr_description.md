@@ -8,7 +8,7 @@ LLM 모델을 최신화(`gemini-2.0-flash-thinking` 등)하고, 상황에 따라
 
 ### 1. Configuration (`.env`)
 - `GEMINI_MODEL_NAME` 환경 변수 도입.
-- **[High Performance]** vs **[Cost Effective]** 프로필 예시 제공.
+- **[High Performance]** vs **[Cost Effective]** 프로필 예시 제공 (한글 가이드 및 변경 이력 링크 포함).
 
 ### 2. Infrastructure Layer
 - **`LangGraphBrain`**:
