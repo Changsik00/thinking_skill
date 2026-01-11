@@ -100,5 +100,6 @@ _Focus: Reliability (Browser Automation)._
 - [ ] YouTube API Integration (Auto-upload).
 - [ ] Dashboard for vector DB visualization.
 - [ ] **Gemini 3 Migration**: Upgrade to `gemini-3-flash` and use `thinking_level`.
+- [ ] **Multi-Provider Support**: Add adapters for OpenAI (GPT-4o) and Anthropic (Claude 3.5).
 - [ ] **Selective Archiving**: Allow user to say "Save this" during chat to trigger storage (requires Interface MVP).
 - [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container to `docker-compose.yml` for visual data inspection.

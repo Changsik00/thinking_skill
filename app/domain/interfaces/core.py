@@ -1,5 +1,3 @@
-# app/domain/interfaces.py
-from abc import ABC, abstractmethod
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from app.domain.entities import DebateResult
@@ -9,14 +7,14 @@ class ThinkingBrain(ABC):
     Interface for the 'Brain' that performs the thinking (debate) process.
     """
     @abstractmethod
-    def think(self, topic: str) -> str:
+    def think(self, topic: str, model_name: Optional[str] = None) -> str:
         """
         Executes the thinking process and returns the final conclusion.
         """
         pass
 
     @abstractmethod
-    async def think_stream(self, topic: str):
+    async def think_stream(self, topic: str, model_name: Optional[str] = None):
         """
         Executes the thinking process and yields text chunks (AsyncIterator).
         """
