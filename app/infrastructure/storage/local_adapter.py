@@ -153,3 +153,72 @@ Date: {result.created_at}
         self._save_to_chroma(result)
         
         return path
+
+    # --- SyncRepository Implementation ---
+    
+    def list_all_chroma_ids(self) -> List[str]:
+        try:
+            host = os.getenv("CHROMA_HOST", "localhost")
+            port = int(os.getenv("CHROMA_PORT", 8000))
+            client = chromadb.HttpClient(host=host, port=port)
+            collection = client.get_or_create_collection(name="macs_discussions")
+            
+            # ChromaDB get() returns dict with 'ids'
+            result = collection.get()
+            return set(result['ids'])
+        except Exception as e:
+            print(f"[System]: Failed to list Chroma IDs: {e}")
+            return set()
+
+    def delete_chroma_documents(self, ids: List[str]) -> int:
+        if not ids:
+            return 0
+        try:
+            host = os.getenv("CHROMA_HOST", "localhost")
+            port = int(os.getenv("CHROMA_PORT", 8000))
+            client = chromadb.HttpClient(host=host, port=port)
+            collection = client.get_or_create_collection(name="macs_discussions")
+            
+            collection.delete(ids=ids)
+            print(f"[System]: Deleted {len(ids)} documents from ChromaDB")
+            return len(ids)
+        except Exception as e:
+            print(f"[System]: Failed to delete from ChromaDB: {e}")
+            return 0
+
+    def list_all_file_ids(self) -> List[str]:
+        if not os.path.exists(self.archive_dir):
+            return set()
+            
+        file_ids = set()
+        files = [f for f in os.listdir(self.archive_dir) if f.endswith(".md")]
+        
+        for filename in files:
+            # Filename format: YYYY-mm-dd_HH-MM-SS_Topic.md
+            # Chroma ID format: Topic_YYYYmmddHHMMSS
+            
+            try:
+                # 1. Remove extension
+                name_body = filename[:-3]
+                
+                # 2. Extract Timestamp (first 19 chars: YYYY-mm-dd_HH-MM-SS)
+                # This assumes standard format. If customized, this might break.
+                # Regex might be safer.
+                match = re.match(r"^(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})_(.+)$", name_body)
+                if match:
+                    ts_str, topic_part = match.groups()
+                    
+                    # Convert timestamp: 2024-01-01_12-00-00 -> 20240101120000
+                    compact_ts = ts_str.replace("-", "").replace("_", "")
+                    
+                    # Reconstruct ID
+                    # Note: _save_to_markdown calls _sanitize_filename on topic.
+                    # The filename already contains the sanitized topic (topic_part).
+                    # So we just use topic_part directly.
+                    
+                    reconstructed_id = f"{topic_part}_{compact_ts}"
+                    file_ids.add(reconstructed_id)
+            except Exception:
+                continue
+                
+        return file_ids

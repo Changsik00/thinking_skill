@@ -69,10 +69,9 @@ _Focus: Context Connectivity (Obsidian & Tools)._
     - **Reason**: Native MCP UI is missing/unstable; `mcpo` provides robust OpenAPI-based connection.
     - **Method**: Add `mcpo` service to `docker-compose.yml`.
     - **Config**: Register `http://host.docker.internal:8000/sse` in `config.json` via volume.
-- [ ] **Data Synchronization Tools** (Follow-up):
+- [x] **Data Synchronization Tools** (Spec 011):
     - **Issue**: File deletion in Obsidian is not reflected in ChromaDB.
-    - **Idea 1**: `reindex_debates` tool (Manual Audit/Sync).
-    - **Idea 2**: File Watcher for real-time updates (Auto).
+    - **Solution**: Implemented `sync_debates` MCP tool to clean up orphaned embeddings.
 
 ## 9. Phase 8: Content Automation
 _Focus: Practical Application via n8n._
