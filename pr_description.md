@@ -16,9 +16,11 @@
 - **[MODIFY]** `prompts.py`: Critical Agent에게 "중요하면 저장하라"는 지침 추가.
 
 ### 3. Verification
-- `scripts/verify_tool_calling.py` (Mock Test) 통과.
-- 일반 대화: 저장 안 됨.
-- 저장 요청: `save_debate` 도구 호출됨.
+- **Test File**: `tests/infrastructure/llm/test_selective_archiving.py`
+- **Command**: `uv run pytest tests/infrastructure/llm/test_selective_archiving.py`
+- **Results**:
+    - `test_casual_conversation_no_save`: 일반 대화 시 저장 도구가 호출되지 않음 (Pass).
+    - `test_explicit_save_request`: "저장해줘" 요청 시 `save_debate` 도구가 정상 호출됨 (Pass).
 
 ## 📝 리뷰 포인트
 - `LangGraphBrain` 내부의 `_create_save_tool` 및 `_build_graph` 로직.
