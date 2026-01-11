@@ -125,9 +125,10 @@ def create_combined_app() -> FastAPI:
     
     # 2. Setup Dependencies for OpenAI Router
     # We need to initialize the full stack (Brain + Nerve + Vault)
-    brain = LangGraphBrain()
     nerve = N8nAdapter()
     vault = LocalAdapter()
+    # Inject vault into brain to enable 'save_debate' tool
+    brain = LangGraphBrain(memory=vault)
     
     run_debate_use_case = RunDebateUseCase(
         brain=brain,
