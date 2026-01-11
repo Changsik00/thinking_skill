@@ -80,6 +80,37 @@ async def save_debate(topic: str, content: str) -> str:
     except Exception as e:
         return f"Failed to save debate. Error: {str(e)}"
 
+# DI for Sync
+from app.usecases.sync_debates import SyncDebatesUseCase
+sync_use_case = SyncDebatesUseCase(adapter)
+
+@mcp.tool()
+async def sync_debates(dry_run: bool = False) -> str:
+    """
+    Synchronize Obsidian files with ChromaDB.
+    Deletes 'orphaned' embeddings from ChromaDB that no longer have a corresponding Markdown file.
+    
+    Args:
+        dry_run: If True, simulates the sync and reports what would be deleted.
+    """
+    try:
+        result = sync_use_case.execute(dry_run=dry_run)
+        
+        mode_str = "[DRY RUN] " if result.get("dry_run") else ""
+        examined = result.get("examined_count", 0)
+        found = result.get("found_garbage_count", 0)
+        deleted = result.get("deleted_count", 0)
+        
+        return (
+            f"{mode_str}Sync Report:\n"
+            f"- Total Chroma Documents Examined: {examined}\n"
+            f"- Orphaned Documents Found: {found}\n"
+            f"- Documents Deleted: {deleted}\n"
+            f"\nStatus: {'Clean' if found == 0 else 'Cleanup Complete' if not dry_run else 'Cleanup Required'}"
+        )
+    except Exception as e:
+        return f"Sync failed. Error: {str(e)}"
+
 def create_combined_app() -> FastAPI:
     """
     Creates a combined FastAPI app that serves both:
