@@ -23,13 +23,15 @@ class LangGraphBrain(ThinkingBrain):
     """
     Implementation of ThinkingBrain using LangGraph and Gemini.
     """
-    def __init__(self, memory: Optional[MemoryVault] = None):
+    def __init__(self, memory: Optional[MemoryVault] = None, nerve: Optional[Any] = None):
         load_dotenv()
         self.api_key = os.getenv("GEMINI_API_KEY")
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY is not set in .env")
         
         self.memory = memory
+        self.nerve = nerve  # N8nAdapter (NerveSystem)
+        
         # Default model from env or fallback
         self.default_model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-001")
         self.graph = self._build_graph()
@@ -48,9 +50,14 @@ class LangGraphBrain(ThinkingBrain):
             temperature=0.7
         )
         
-        # Bind tools if memory is available
+        # Bind tools if available
+        tools = []
         if self.memory:
-            tools = [self._create_save_tool()]
+            tools.append(self._create_save_tool())
+        if self.nerve:
+            tools.append(self._create_automation_tool())
+            
+        if tools:
             return llm.bind_tools(tools)
         
         return llm
@@ -75,6 +82,27 @@ class LangGraphBrain(ThinkingBrain):
                 return f"Failed to save: {str(e)}"
                 
         return save_debate
+
+    def _create_automation_tool(self):
+        """Creates the trigger_automation tool bound to the nerve system."""
+        
+        @tool("trigger_automation")
+        def trigger_automation(target: str, content: str) -> str:
+            """
+            Trigger an external automation workflow via n8n.
+            
+            Args:
+                target: The destination/intent (e.g., 'slack', 'email', 'blog', 'jira').
+                content: The summary or content to send.
+            """
+            if not self.nerve:
+                return "Automation system (Nerve) is not connected."
+            
+            # Create a temporary result object to pass to adapter
+            result = DebateResult(topic="Automation Trigger", content=content, model="System")
+            return self.nerve.trigger(result, target=target)
+            
+        return trigger_automation
 
     def _creative_node(self, state: AgentState, config: RunnableConfig):
         messages = state["messages"]
@@ -116,9 +144,15 @@ class LangGraphBrain(ThinkingBrain):
         workflow.add_edge(START, "creative")
         workflow.add_edge("creative", "critical")
         
-        # If memory is enabled, add ToolNode and Conditional Edges
+        # Collect tools
+        tools = []
         if self.memory:
-            tools = [self._create_save_tool()]
+            tools.append(self._create_save_tool())
+        if self.nerve:
+            tools.append(self._create_automation_tool())
+            
+        # If tools enabled, add ToolNode and Conditional Edges
+        if tools:
             workflow.add_node("tools", ToolNode(tools))
             
             workflow.add_conditional_edges(

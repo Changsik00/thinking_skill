@@ -1,27 +1,28 @@
-# PR: Spec 013 - 선택적 아카이빙 (Selective Archiving)
+# PR: Spec 014 - 콘텐츠 자동화 (Content Automation via n8n)
 
 ## 📌 개요
-기존의 자동 저장 방식을 제거하고, **"저장해줘"**와 같은 명시적 요청이 있을 때만 에이전트가 도구를 사용하여 저장하도록 변경했습니다.
-이를 통해 불필요한 데이터 저장을 막고, 에이전트의 주권(Agency)을 강화했습니다.
+토론 결과를 외부 서비스(Slack, Blog 등)로 확장하기 위한 **자동화 인프라**를 구축했습니다.
+Brain(에이전트)이 스스로 `trigger_automation` 도구를 사용하여 n8n Webhook을 호출할 수 있게 되었습니다.
 
 ## 🛠️ 변경 사항
 
-### 1. Application Layer (`RunDebateUseCase`)
-- **[MODIFY]** `execute`, `execute_stream`: 자동 저장 로직 삭제.
-- UseCase는 더 이상 `memory.save()`를 직접 호출하지 않습니다.
+### 1. Infrastructure Layer (`N8nAdapter`)
+- **[MODIFY]** `trigger` 메서드: `target` 파라미터 추가. 슬랙, 이메일 등 목적지에 따라 페이로드를 구성하여 n8n으로 전송.
 
-### 2. Infrastructure Layer (`LangGraphBrain`)
-- **[MODIFY]** `LangGraphBrain`: `MemoryVault`를 주입받아 `save_debate` 도구를 생성 및 바인딩.
-- **[NEW]** `ToolNode`: 그래프에 도구 실행 노드 추가.
-- **[MODIFY]** `prompts.py`: Critical Agent에게 "중요하면 저장하라"는 지침 추가.
+### 2. Application Layer (`LangGraphBrain`)
+- **[NEW]** `trigger_automation` 도구: 에이전트가 사용할 수 있는 새 도구 정의.
+- **[MODIFY]** `LangGraphBrain`: `nerve` (N8nAdapter) 의존성을 주입받아 도구 바인딩.
 
-### 3. Verification
-- **Test File**: `tests/infrastructure/llm/test_selective_archiving.py`
-- **Command**: `uv run pytest tests/infrastructure/llm/test_selective_archiving.py`
-- **Results**:
-    - `test_casual_conversation_no_save`: 일반 대화 시 저장 도구가 호출되지 않음 (Pass).
-    - `test_explicit_save_request`: "저장해줘" 요청 시 `save_debate` 도구가 정상 호출됨 (Pass).
+### 3. Example Workflow
+- **[NEW]** `specs/014-content-automation/n8n-workflow-example.json`: n8n에 바로 Import하여 테스트할 수 있는 예제 워크플로우 제공. (Webhook -> Route -> Slack/Email Mock)
+
+## 🧪 검증 (Verification)
+- **Unit Test**: `uv run pytest tests/infrastructure/automation/test_n8n_trigger.py` (Pass)
+    - `test_trigger_success`: 정상 페이로드 전송 확인.
+    - `test_trigger_failure`: 404/500 에러 처리 확인.
+    - `test_no_env_var`: 환경변수 누락 시 경고 처리 확인.
+- **Manual Test**: 로컬 n8n 컨테이너와 연동하여 데이터 수신 확인 완료.
 
 ## 📝 리뷰 포인트
-- `LangGraphBrain` 내부의 `_create_save_tool` 및 `_build_graph` 로직.
-- `RunDebateUseCase`의 단순화된 흐름.
+- `N8nAdapter`의 `target` 처리 로직 확장성.
+- `LangGraphBrain`의 도구 조건부 바인딩 방식.

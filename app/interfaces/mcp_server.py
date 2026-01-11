@@ -127,8 +127,8 @@ def create_combined_app() -> FastAPI:
     # We need to initialize the full stack (Brain + Nerve + Vault)
     nerve = N8nAdapter()
     vault = LocalAdapter()
-    # Inject vault into brain to enable 'save_debate' tool
-    brain = LangGraphBrain(memory=vault)
+    # Inject vault and nerve into brain to enable tools
+    brain = LangGraphBrain(memory=vault, nerve=nerve)
     
     run_debate_use_case = RunDebateUseCase(
         brain=brain,
@@ -144,6 +144,9 @@ def create_combined_app() -> FastAPI:
     
     return app
 
+# Expose 'app' for Uvicorn
+app = create_combined_app()
+
 if __name__ == "__main__":
     import sys
     if "--sse" in sys.argv:
@@ -153,7 +156,6 @@ if __name__ == "__main__":
         print("- OpenAI API: http://0.0.0.0:8000/openai/v1")
         
         # Run the combined app
-        combined_app = create_combined_app()
-        uvicorn.run(combined_app, host="0.0.0.0", port=8000)
+        uvicorn.run(app, host="0.0.0.0", port=8000)
     else:
         mcp.run()
