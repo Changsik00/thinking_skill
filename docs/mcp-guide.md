@@ -56,8 +56,8 @@ graph TD
         Claude -->|MCP 요청: search_debates| MCPServer[Thingking MCP Server]
         
         MCPServer -->|파일 읽기| Adapter[Local Adapter]
-        Adapter -->|Markdown 파싱| Files[(Obsidian Vault)]
-        Adapter -->|의미 검색 (Future)| VectorDB[(ChromaDB)]
+        Adapter -->|Markdown 파싱| Files[("Obsidian Vault")]
+        Adapter -->|"의미 검색 (Future)"| VectorDB[("VectorDB")]
         
         VectorDB -.->|검색 결과| Adapter
         Files -.->|파일 내용| Adapter
