@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: [ main, "feat/016-devops-automation" ]
+    branches: [ main, "feat/**" ]
   pull_request:
     branches: [ main ]
 
