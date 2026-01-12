@@ -10,18 +10,15 @@ def test_run_debate_flow():
     nerve = FakeNerve()
     use_case = RunDebateUseCase(brain=brain, memory=memory, nerve=nerve)
 
-    # 1. Test with keyword (Should Save)
-    topic_save = "TDD 저장 practice"
-    result_save = use_case.execute(topic_save)
+    # 1. Test execution flow
+    topic = "Any Topic"
+    result = use_case.execute(topic)
     
-    assert result_save.topic == topic_save
-    assert len(memory.saved_items) == 1
-    assert result_save.metadata["saved_path"].startswith("/mock/path/")
+    assert result.topic == topic
+    assert result.content == "Mock Content"
+    # Logic Update (Spec 013): UseCase no longer auto-saves.
+    # FakeBrain does not invoke tools, so nothing should be saved.
+    assert len(memory.saved_items) == 0
+    # Nerve should still be triggered (if implemented in UseCase)
+    # Checking implementation: UseCase calls nerve.trigger(result)
     assert nerve.triggered_count == 1
-
-    # 2. Test without keyword (Should NOT Save)
-    topic_nosave = "Just Chatting"
-    result_nosave = use_case.execute(topic_nosave)
-    
-    assert len(memory.saved_items) == 1  # Still 1 (no new save)
-    assert nerve.triggered_count == 2    # Triggered twice (always triggers)
