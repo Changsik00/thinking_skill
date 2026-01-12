@@ -30,10 +30,10 @@ graph TD
 ### 2.3. Infrastructure Layer (`app/infrastructure`)
 - **역할**: 인터페이스의 실제 구현체를 담당합니다.
 - **구성 요소**:
-    - `LangGraphBrain`: LangChain/LangGraph 구현체.
+    - `LangGraphBrain`: LangChain/LangGraph 구현체 (Dynamic Model Selection: Gemini 2.0/1.5).
     - `LocalAdapter`: 파일 시스템 및 ChromaDB 구현체.
     - `N8nAdapter`: HTTP Request 구현체.
-
+    - `MCPO Bridge`: OpenWebUI와 MCP 서버 간의 통신 중계 (Docker Container).
 ### 2.4. Interface Layer (`app/interfaces`)
 - **역할**: 외부 세계와 애플리케이션을 연결합니다.
 - **구성 요소**:
@@ -62,9 +62,8 @@ sequenceDiagram
     end
     
     Note over UseCase: Aggregate Tokens -> Full Content
-    UseCase->>Memory: save(result)
-    UseCase->>Nerve: trigger(result)
-    API-->>Client: Stream End
+    UseCase->>Memory: save(result) (Optional: if 'save_debate' tool used)
+    UseCase->>Nerve: trigger(result) (Optional: if 'trigger_automation' used)
 ```
 
 ## 3. 개발 가이드 (Dev Guide)
