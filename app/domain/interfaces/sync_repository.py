@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import List, Set
 
+
 class SyncRepository(ABC):
     @abstractmethod
     def list_all_chroma_ids(self) -> Set[str]:
         """List all Document IDs stored in ChromaDB."""
         pass
-    
+
     @abstractmethod
     def delete_chroma_documents(self, ids: List[str]) -> int:
         """
@@ -14,7 +15,7 @@ class SyncRepository(ABC):
         Returns the number of deleted documents.
         """
         pass
-        
+
     @abstractmethod
     def list_all_file_ids(self) -> Set[str]:
         """

@@ -1,22 +1,28 @@
-import pytest
 from unittest.mock import AsyncMock, MagicMock
-from app.usecases.manage_debates import ListDebatesUseCase, GetDebateUseCase
+
+import pytest
+
 from app.domain.entities import DebateResult
+from app.usecases.manage_debates import GetDebateUseCase, ListDebatesUseCase
+
 
 @pytest.fixture
 def mock_memory_vault():
     return AsyncMock()
 
+
 @pytest.fixture
 def mock_results():
     return [
         DebateResult(topic="T1", content="C1", model="M1", created_at="2024-01-01"),
-        DebateResult(topic="T2", content="C2", model="M2", created_at="2024-01-02")
+        DebateResult(topic="T2", content="C2", model="M2", created_at="2024-01-02"),
     ]
+
 
 @pytest.fixture
 def mock_result():
     return DebateResult(topic="T1", content="C1", model="M1", created_at="2024-01-01")
+
 
 @pytest.mark.asyncio
 async def test_list_debates_use_case(mock_memory_vault, mock_results):
@@ -32,6 +38,7 @@ async def test_list_debates_use_case(mock_memory_vault, mock_results):
     assert results == mock_results
     assert len(results) == 2
 
+
 @pytest.mark.asyncio
 async def test_get_debate_use_case_found(mock_memory_vault, mock_result):
     # Setup
@@ -45,6 +52,7 @@ async def test_get_debate_use_case_found(mock_memory_vault, mock_result):
     mock_memory_vault.get_debate.assert_called_once_with(topic="T1")
     assert result == mock_result
     assert result.topic == "T1"
+
 
 @pytest.mark.asyncio
 async def test_get_debate_use_case_not_found(mock_memory_vault):

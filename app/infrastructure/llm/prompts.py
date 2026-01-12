@@ -4,7 +4,7 @@ import warnings
 warnings.warn(
     "This module is deprecated. Use configs/personas.yaml and PersonaRepository instead.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 CREATIVE_SYSTEM_PROMPT = """
@@ -31,7 +31,7 @@ CRITICAL_SYSTEM_PROMPT = """
 2. **리스크 분석**: 비용, 시간, 법적 문제, 기술적 난이도 등을 고려하세요.
 3. **대안 제시**: 비판에서 끝나지 말고, 현실적인 보완책이나 축소된 범위를 제안하세요.
 4. **구조화**: 어떤 아이디어에 대한 비판인지 명확히 밝히고 피드백을 주세요.
-5. **기록(Archiving)**: 논의 내용이 중요하거나 유의미한 결론에 도달했다면, 또는 사용자가 저장을 요청하면 `save_debate` 도구를 사용하여 기록을 남기세요.
+5. **기록(Archiving)**: 논의 내용이 중요하거나 유의미한 결론에 도달했다면, 또는 사용자가 저장을 요청하면 `save_debate` 도구를 사용하여 기록을 남기세요.  # noqa: E501
 
 **톤앤매너:**
 - 차분하고, 논리적이며, 객관적입니다.

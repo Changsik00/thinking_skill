@@ -1,7 +1,9 @@
 # tests/mocks/fake_adapters.py
-from typing import List, Dict, Optional
-from app.domain.interfaces import ThinkingBrain, MemoryVault, NerveSystem
+from typing import List, Optional
+
 from app.domain.entities import DebateResult
+from app.domain.interfaces import MemoryVault, NerveSystem, ThinkingBrain
+
 
 class FakeBrain(ThinkingBrain):
     def __init__(self, response: str = "Fake Debate Conclusion"):
@@ -19,6 +21,7 @@ class FakeBrain(ThinkingBrain):
         self.last_topic = topic
         yield self.response
 
+
 class FakeMemory(MemoryVault):
     def __init__(self):
         self.saved_items: List[DebateResult] = []
@@ -35,6 +38,7 @@ class FakeMemory(MemoryVault):
             if item.topic == topic:
                 return item
         return None
+
 
 class FakeNerve(NerveSystem):
     def __init__(self):

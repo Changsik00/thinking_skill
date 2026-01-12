@@ -1,6 +1,8 @@
 import asyncio
+
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+
 
 async def run():
     # Define server parameters
@@ -25,10 +27,11 @@ async def run():
             print("\n>>> Testing Tool Execution (search_debates)...")
             tools = await session.list_tools()
             print(f"Found Tools: {[t.name for t in tools.tools]}")
-            
+
             # Executing search
             result = await session.call_tool("search_debates", arguments={"query": "AI"})
-            print(f"Search Result:\n{result.content[0].text[:200]}...") # Print first 200 chars
+            print(f"Search Result:\n{result.content[0].text[:200]}...")  # Print first 200 chars
+
 
 if __name__ == "__main__":
     asyncio.run(run())

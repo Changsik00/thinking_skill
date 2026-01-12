@@ -1,11 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
+
 from app.domain.entities import DebateResult
+
 
 class ThinkingBrain(ABC):
     """
     Interface for the 'Brain' that performs the thinking (debate) process.
     """
+
     @abstractmethod
     def think(self, topic: str, model_name: Optional[str] = None) -> str:
         """
@@ -20,10 +23,12 @@ class ThinkingBrain(ABC):
         """
         pass
 
+
 class MemoryVault(ABC):
     """
     Interface for 'Memory' storage.
     """
+
     @abstractmethod
     def save(self, result: DebateResult) -> str:
         """
@@ -45,10 +50,12 @@ class MemoryVault(ABC):
         """
         pass
 
+
 class NerveSystem(ABC):
     """
     Interface for 'Nerve' system (automation triggers).
     """
+
     @abstractmethod
     def trigger(self, result: DebateResult) -> None:
         """

@@ -1,9 +1,12 @@
 # app/interfaces/api/schemas.py
+from typing import Any, Dict
+
 from pydantic import BaseModel
-from typing import Dict, Any
+
 
 class DebateRequest(BaseModel):
     topic: str
+
 
 class DebateResponse(BaseModel):
     topic: str

@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
+
 from app.domain.entities.persona import Persona
+
 
 class PersonaRepository(ABC):
     """

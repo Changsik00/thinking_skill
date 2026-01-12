@@ -1,8 +1,11 @@
-import yaml
 import os
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
+
+import yaml
+
 from app.domain.entities.persona import Persona
 from app.domain.repositories.persona_repository import PersonaRepository
+
 
 class FilePersonaRepository(PersonaRepository):
     """
@@ -26,7 +29,7 @@ class FilePersonaRepository(PersonaRepository):
         try:
             with open(self.config_path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
-                
+
             if not data or "personas" not in data:
                 return
 
@@ -35,7 +38,7 @@ class FilePersonaRepository(PersonaRepository):
                     key=key,
                     name=info.get("name", key),
                     display_name=info.get("display_name", key),
-                    system_prompt=info.get("system_prompt", "")
+                    system_prompt=info.get("system_prompt", ""),
                 )
         except Exception as e:
             print(f"Error loading personas: {e}")
