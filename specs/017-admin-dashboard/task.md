@@ -10,7 +10,7 @@
         - [ ] Tab 1: File Storage Viewer (Markdown).
         - [ ] Tab 2: Vector DB Inspector (ChromaDB).
         - [ ] Tab 3: Search Playground.
-    - [ ] **Infrastructure**: `pyproject.toml` dependency (`streamlit`).
+    - [x] **Infrastructure**: `pyproject.toml` dependency (`streamlit`).
     - [ ] **Documentation**: `docs/admin-guide.md` 작성.
         - [ ] Streamlit 소개 및 대시보드 사용법 정리.
 
