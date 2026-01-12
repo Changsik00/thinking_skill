@@ -11,7 +11,7 @@ st.title("🧠 MACS Admin Dashboard")
 
 # Constants
 DEBATE_DIR = "data/debates"
-CHROMA_DIR = "data/chroma_db"
+CHROMA_DIR = "data/chroma"
 
 # Tabs
 tab1, tab2, tab3 = st.tabs(["📂 File Storage", "💾 Vector DB (Chroma)", "🔍 Search Playground"])
