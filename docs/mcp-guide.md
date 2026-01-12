@@ -50,7 +50,7 @@ Thingking MCP 시스템의 구조와 동작 원리입니다.
 
 ```mermaid
 graph TD
-    User[사용자 (User)] -->|질문: '작년 AI 토론 요약해줘'| Claude[AI (Claude Desktop)]
+    User["사용자 (User)"] -->|질문: '작년 AI 토론 요약해줘'| Claude["AI (Claude Desktop)"]
     
     subgraph "Local Computer"
         Claude -->|MCP 요청: search_debates| MCPServer[Thingking MCP Server]
