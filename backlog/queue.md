@@ -35,4 +35,5 @@ _Focus: DevOps & Quality Assurance & New Features._
 - [ ] **YouTube Sync**: Auto-upload debate content.
 - [ ] Dashboard for vector DB visualization.
 - [ ] **Multi-Provider Support**: Add adapters for OpenAI (GPT-4o) and Anthropic (Claude 3.5).
-- [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container.
+- [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container (Dedicated Tool).
+- [ ] **Dedicated Chroma Admin Tool**: Evaluate `chroma-admin` or `BootstrapDash` templates for advanced DB management (Icebox).
