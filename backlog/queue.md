@@ -24,10 +24,15 @@ _Items promoted to Spec or currently under discussion._
 - [x] **Spec 016: DevOps Automation (CI)**
     - **Goal**: GitHub Actions for automated testing.
     - **Scope**: `.github/workflows/test.yml`, `uv` integration, `pytest`.
+- [ ] **Spec 017: Admin Dashboard (MVP)**
+    - **Goal**: Web-based viewer for Debates & Vector DB.
+    - **Tech**: Streamlit.
 
-## 12. Icebox (Ideas & Enhancements)
-- [ ] Voice Interface (TTS/STT).
-- [ ] YouTube API Integration (Auto-upload).
+## 1. Next (Phase 9: Reliability & Expansion)
+_Focus: DevOps & Quality Assurance & New Features._
+
+- [ ] **Voice Interface**: TTS/STT integration (Creative Studio concept).
+- [ ] **YouTube Sync**: Auto-upload debate content.
 - [ ] Dashboard for vector DB visualization.
 - [ ] **Multi-Provider Support**: Add adapters for OpenAI (GPT-4o) and Anthropic (Claude 3.5).
 - [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container.

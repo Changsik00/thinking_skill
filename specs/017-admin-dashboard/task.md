@@ -14,6 +14,6 @@
     - [x] **Documentation**: `docs/admin-guide.md` 작성.
         - [x] Streamlit 소개 및 대시보드 사용법 정리.
 
-- [ ] **검증 (Verification)**
-    - [ ] 로컬 실행 테스트 (`streamlit run`).
-    - [ ] 데이터 조회 및 검색 기능 검증.
+- [x] **검증 (Verification)**
+    - [x] 로컬 실행 테스트 (`streamlit run`).
+    - [x] 데이터 조회 및 검색 기능 검증.
