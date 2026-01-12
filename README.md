@@ -1,4 +1,5 @@
 # MACS (Multi-Agent Creative Studio)
+![Build Status](https://github.com/Changsik00/thinking_skill/actions/workflows/test.yml/badge.svg)
 
 아이디어 브레인스토밍부터 유튜브 콘텐츠 소스 생성까지, 로컬 기반의 멀티 에이전트 협업 자동화 시스템입니다.
 
