@@ -8,8 +8,8 @@ MACS 프로젝트는 유지보수성과 확장성을 최우선으로 고려하�
 
 ```mermaid
 graph TD
-    Interface[Interfaces (Web/CLI)] --> UseCase[Use Cases]
-    Infrastructure[Infrastructure (DB/LLM)] --> Domain[Domain (Entities)]
+    Interface["Interfaces (Web/CLI)"] --> UseCase[Use Cases]
+    Infrastructure["Infrastructure (DB/LLM)"] --> Domain["Domain (Entities)"]
     UseCase --> Domain
 ```
 

@@ -5,79 +5,65 @@
 
 ---
 
-## 1. Architecture (Clean Architecture)
+## 1. Features (주요 기능)
+- **🤖 삼각 토론 시스템 (Triangular Debate)**: 창의적 발산가(Creative)와 냉철한 비평가(Critical)의 자동 토론. (Gemini 2.0 Dynamic Selection)
+- **🧠 선택적 아카이빙 (Smart Archiving)**: AI가 가치 있다고 판단하거나 사용자가 요청할 때만 결과 저장 (`data/archives` & ChromaDB).
+- **🔧 MCP Support**: Claude Desktop, OpenWebUI 등에서 내 로컬 데이터와 도구를 직접 호출 (`search_debates`, `save_debate`).
+- **🔗 Automation (Nerve)**: n8n Webhook을 통해 Slack, Notion 등 외부 도구로 워크플로우 확장.
+- **📊 Admin Dashboard**: Streamlit 기반의 데이터 시각화 및 검색 테스트 도구.
 
-본 프로젝트는 **Clean Architecture** 원칙에 따라 철저하게 계층을 분리했습니다.
+## 2. Quick Start (Usage)
 
-- **Domain (`app/domain`)**: 순수 비즈니스 로직 (외부 의존성 0%).
-- **Use Cases (`app/usecases`)**: 애플리케이션 흐름 제어 및 오케스트레이션.
-- **Infrastructure (`app/infrastructure`)**: LangGraph, ChromaDB, n8n 등 기술적 구현체.
-- **Interfaces (`app/interfaces`)**: CLI, FastAPI 등 외부 통신 관문.
+### 2.1. Prerequisites
+- **Python 3.11+** & **[uv](https://docs.astral.sh/uv/)** (Package Manager)
+- **Docker** & Docker Compose (for ChromaDB, n8n, OpenWebUI)
+- **Generic API Key**: `.env` 설정 필요 (참고: `docs/setup-guide.md`)
 
-## 2. 주요 기능 (Features)
-
-- **삼각 토론 시스템**: 창의적 발산가(Creative)와 냉철한 비평가(Critical)의 자동 토론. (Gemini 2.0/Gemini 1.5 Dynamic Selection)
-- **선택적 아카이빙**: Agent가 토론 가치를 판단하여 Markdown 파일 및 ChromaDB(임베딩)에 선택적으로 영구 저장 (`save_debate`).
-- **OpenWebUI 지원**: 직관적인 채팅 인터페이스 제공 (MCP Tool 호출 지원).
-- **자동화 연동**: n8n Webhook을 통해 외부 워크플로우(Notion, Slack 등) 트리거.
-- **REST API**: FastAPI 기반의 HTTP 인터페이스 제공.
-
-## 3. 실행 방법 (Usage)
-
-### 3.1. 사전 요구사항 (Prerequisites)
-- Docker & Docker Compose
-- `uv` (Python Package Manager)
-
-### 3.2. 인프라 실행 (Docker)
 ```bash
-docker compose up -d
-```
-ChromaDB, n8n, OpenWebUI (`http://localhost:3000`), MCPO Bridge 컨테이너가 실행됩니다.
-**OpenWebUI**에 접속하여 MCP 도구들을 활용할 수 있습니다.
-
-### 3.3. 서버 실행 (FastAPI)
-```bash
-uv run uvicorn app.main:app --reload
-```
-서버가 `http://localhost:8000` 에서 시작됩니다.
-
-### 3.4. API 테스트 (Curl)
-```bash
-curl -X POST "http://localhost:8000/api/v1/debates" \
-     -H "Content-Type: application/json" \
-     -d '{"topic": "인공지능의 미래"}'
+# 설치 및 의존성 동기화
+uv sync
 ```
 
-### 3.5. 테스트 실행 (Unit Test)
-```bash
-uv run pytest
-```
-Mock 기반의 유닛 테스트를 수행합니다.
+### 2.2. Running the System
+원하는 인터페이스에 따라 실행 명령어를 선택하세요.
 
-### 3.6. MCP Server 실행
-```bash
-uv run python -m app.interfaces.mcp_server
-```
-Obsidian/Claude Desktop 연동을 위한 MCP 서버를 실행합니다.
+| Mode | Command | Description |
+| :--- | :--- | :--- |
+| **All Infrastructure** | `docker compose up -d` | ChromaDB, n8n, OpenWebUI 실행. |
+| **Admin Dashboard** | `uv run streamlit run app/admin/dashboard.py` | 저장된 데이터 조회 및 검색 테스트. |
+| **MCP Server** | `uv run python -m app.interfaces.mcp_server` | Claude Desktop 연동용 (Stdio). |
+| **MCP Server (SSE)** | `uv run python -m app.interfaces.mcp_server --sse` | OpenWebUI 연동용 (HTTP SSE). |
+| **FastAPI Server** | `uv run uvicorn app.main:app --reload` | REST API 개발용. |
+| **Unit Test** | `uv run pytest` | 로컬 테스트 실행. |
 
-### 3.7. Admin Dashboard 실행
-```bash
-uv run streamlit run app/admin/dashboard.py
-```
-저장된 데이터(File/Vector)를 시각적으로 확인하는 대시보드를 실행합니다 (`http://localhost:8501`).
+---
 
-## 4. 폴더 구조 (Structure)
-```
-app/
-├── domain/             # Entities, Interfaces
-├── usecases/           # Business Logic
-├── infrastructure/     # Adapters (LLM, Storage, Automation)
-└── interfaces/         # Adapters (API, CLI)
-tests/                  # Unit Tests & Mocks
-specs/                  # Development Specifications
+## 3. Project Structure (폴더 구조)
+**Clean Architecture** 원칙에 따라 계층이 분리되어 있습니다.
+
+```text
+.
+├── app/
+│   ├── domain/             # [Core] 순수 비즈니스 로직 & 엔티티
+│   ├── usecases/           # [App Logic] 애플리케이션 흐름 제어
+│   ├── infrastructure/     # [Impl] LangGraph, Chroma, n8n 등의 구현체
+│   └── interfaces/         # [Entry] API, CLI, MCP Server 진입점
+├── docs/                   # 프로젝트 문서 (가이드, 아키텍처)
+├── specs/                  # 개발 명세서 (Spect-Plan-Task logs)
+├── tests/                  # 유닛 테스트 & Mocks
+├── backlog/                # 프로젝트 백로그 (Queue)
+└── data/                   # (GitIgnore) 로컬 데이터 저장소
 ```
 
-## 5. Documentation
-- [Setup Guide](docs/setup-guide.md)
-- [Architecture Details](docs/architecture.md)
-- [MCP Guide](docs/mcp-guide.md)
+## 4. Documentation (문서)
+더 자세한 내용은 아래 문서를 참고하세요.
+
+| 문서 | 설명 |
+| :--- | :--- |
+| **[Setup Guide](docs/setup-guide.md)** | 초기 설치 및 환경 변수 설정 가이드 |
+| **[Architecture](docs/architecture.md)** | 클린 아키텍처 설계 원칙 및 다이어그램 |
+| **[Core Loop](docs/core-loop-architecture.md)** | LangGraph 기반의 토론 엔진 동작 원리 |
+| **[MCP Guide](docs/mcp-guide.md)** | Model Context Protocol 개념 및 연동 방법 |
+| **[OpenWebUI Guide](docs/open-webui-guide.md)** | OpenWebUI와 MCP 도구 사용법 |
+| **[Admin Guide](docs/admin-guide.md)** | 대시보드 사용법 및 ChromaDB 확인 |
+| **[Data Storage Policy](docs/data-storage-policy.md)** | 선택적 아카이빙 및 파일 저장 정책 |

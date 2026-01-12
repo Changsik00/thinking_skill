@@ -20,9 +20,15 @@ graph LR
     Creative --> Critical[Critical Node]
     Critical --> End((End))
     
-    style User fill:#f9f,stroke:#333
-    style Creative fill:#bbf,stroke:#333
-    style Critical fill:#fbb,stroke:#333
+    %% Styles for better visibility in Light/Dark modes
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#000;
+    classDef user fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef creative fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000;
+    classDef critical fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000;
+
+    class User user;
+    class Creative creative;
+    class Critical critical;
 ```
 
 1.  **Start**: `agents/runner.py`가 사용자의 주제(Topic)를 받아 **State**에 넣습니다.
