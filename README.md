@@ -60,6 +60,12 @@ uv run python -m app.interfaces.mcp_server
 ```
 Obsidian/Claude Desktop 연동을 위한 MCP 서버를 실행합니다.
 
+### 3.7. Admin Dashboard 실행
+```bash
+uv run streamlit run app/admin/dashboard.py
+```
+저장된 데이터(File/Vector)를 시각적으로 확인하는 대시보드를 실행합니다 (`http://localhost:8501`).
+
 ## 4. 폴더 구조 (Structure)
 ```
 app/
