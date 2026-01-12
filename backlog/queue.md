@@ -21,13 +21,9 @@ _Items promoted to Spec or currently under discussion._
 - [x] **Spec 014: Content Automation (n8n)**
     - **Goal**: Trigger external workflows (e.g., Slack, Blog) via n8n.
     - **Scope**: `N8nAdapter` update, `trigger_automation` tool, Local Verification.
-
-## 1. Next (Phase 9: Reliability)
-_Focus: DevOps & Quality Assurance._
-_Focus: DevOps & Quality Assurance._
-
-- [ ] **GitHub Actions**: Setup `.github/workflows/test.yml`.
-- [ ] **Unit Tests**: Trigger `pytest` on push.
+- [x] **Spec 016: DevOps Automation (CI)**
+    - **Goal**: GitHub Actions for automated testing.
+    - **Scope**: `.github/workflows/test.yml`, `uv` integration, `pytest`.
 
 ## 12. Icebox (Ideas & Enhancements)
 - [ ] Voice Interface (TTS/STT).
