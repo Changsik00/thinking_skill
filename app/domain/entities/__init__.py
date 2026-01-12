@@ -1,2 +1,2 @@
-from .debate_result import DebateResult
-from .persona import Persona
+from .debate_result import DebateResult as DebateResult
+from .persona import Persona as Persona

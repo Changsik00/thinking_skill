@@ -1,5 +1,5 @@
 import requests
-import json
+
 
 class Tools:
     def __init__(self):
@@ -10,13 +10,13 @@ class Tools:
         """
         Save a debate or conversation with a specific topic and content.
         Useful when you want to persist the current discussion or an analysis result.
-        
+
         :param topic: The topic of the debate.
         :param content: The content of the debate.
         """
         url = f"{self.base_url}/save_debate"
         payload = {"topic": topic, "content": content}
-        
+
         try:
             response = requests.post(url, json=payload, timeout=10)
             response.raise_for_status()
@@ -29,12 +29,12 @@ class Tools:
     def search_debates(self, query: str) -> str:
         """
         Search debates by keyword (searches topic and content).
-        
+
         :param query: The search query keyword.
         """
         url = f"{self.base_url}/search_debates"
         payload = {"query": query}
-        
+
         try:
             response = requests.post(url, json=payload, timeout=10)
             response.raise_for_status()

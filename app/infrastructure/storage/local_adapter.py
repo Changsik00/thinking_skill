@@ -1,16 +1,20 @@
 # app/infrastructure/storage/local_adapter.py
 import os
 import re
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
+
 import chromadb
+
 from app.domain.entities import DebateResult
 from app.domain.interfaces import MemoryVault
+
 
 class LocalAdapter(MemoryVault):
     """
     Implementation of MemoryVault that saves to local filesystem and ChromaDB.
     """
+
     def __init__(self, archive_dir: str = "data/archives"):
         # Prioritize Environment Variable -> Constructor Argument
         env_path = os.getenv("OBSIDIAN_VAULT_PATH")
@@ -18,24 +22,24 @@ class LocalAdapter(MemoryVault):
 
     def _sanitize_filename(self, name: str) -> str:
         # Replace newlines and tabs with underscore
-        name = re.sub(r'[\n\t]', "_", name)
+        name = re.sub(r"[\n\t]", "_", name)
         # Remove invalid chars for filesystem
         name = re.sub(r'[\\/*?:"<>|]', "", name)
         # Replace spaces with underscore
         name = name.replace(" ", "_")
         # Deduplicate underscores
-        name = re.sub(r'_+', "_", name)
+        name = re.sub(r"_+", "_", name)
         # Truncate to safe length (100 chars)
         return name[:100]
 
     def _save_to_markdown(self, result: DebateResult) -> str:
         os.makedirs(self.archive_dir, exist_ok=True)
-        
+
         safe_topic = self._sanitize_filename(result.topic)
         filename_ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = f"{filename_ts}_{safe_topic}.md"
         file_path = os.path.join(self.archive_dir, filename)
-        
+
         # YAML Frontmatter for Obsidian
         markdown_content = f"""---
 type: debate
@@ -53,7 +57,7 @@ Date: {result.created_at}
 """
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(markdown_content)
-            
+
         return os.path.abspath(file_path)
 
     def _save_to_chroma(self, result: DebateResult) -> None:
@@ -62,15 +66,15 @@ Date: {result.created_at}
             port = int(os.getenv("CHROMA_PORT", 8000))
             client = chromadb.HttpClient(host=host, port=port)
             collection = client.get_or_create_collection(name="macs_discussions")
-            
-            timestamp_id = datetime.now().strftime('%Y%m%d%H%M%S')
+
+            timestamp_id = datetime.now().strftime("%Y%m%d%H%M%S")
             safe_topic = self._sanitize_filename(result.topic)
             doc_id = f"{safe_topic}_{timestamp_id}"
-            
+
             collection.add(
                 documents=[result.content],
                 metadatas=[{"topic": result.topic, "timestamp": result.created_at}],
-                ids=[doc_id]
+                ids=[doc_id],
             )
             print(f"[System]: Saved to ChromaDB (ID: {doc_id})")
         except Exception as e:
@@ -80,26 +84,26 @@ Date: {result.created_at}
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            
+
             # Simple frontmatter parser
             parts = content.split("---", 2)
             if len(parts) < 3:
-                return None # Invalid format
-            
+                return None  # Invalid format
+
             frontmatter_str = parts[1]
             body = parts[2].strip()
-            
+
             metadata = {}
             for line in frontmatter_str.split("\n"):
                 if ":" in line:
                     key, val = line.split(":", 1)
                     metadata[key.strip()] = val.strip().strip('"')
-            
+
             return DebateResult(
                 topic=metadata.get("topic", "Unknown"),
                 content=body,
                 model=metadata.get("model", "Unknown"),
-                created_at=metadata.get("date", "")
+                created_at=metadata.get("date", ""),
             )
         except Exception:
             return None
@@ -111,10 +115,10 @@ Date: {result.created_at}
         """
         if not os.path.exists(self.archive_dir):
             return []
-            
+
         files = [f for f in os.listdir(self.archive_dir) if f.endswith(".md")]
-        files.sort(reverse=True) # Filenames start with timestamp, so string sort works for date desc
-        
+        files.sort(reverse=True)  # Filenames start with timestamp, so string sort works for date desc
+
         results = []
         for filename in files[:limit]:
             result = self._parse_markdown_file(os.path.join(self.archive_dir, filename))
@@ -124,7 +128,7 @@ Date: {result.created_at}
 
     def get_debate(self, topic: str) -> Optional[DebateResult]:
         """
-        Retrieves a specific debate by topic. 
+        Retrieves a specific debate by topic.
         Searches for the most recent file containing the sanitized topic string.
         """
         if not os.path.exists(self.archive_dir):
@@ -132,14 +136,14 @@ Date: {result.created_at}
 
         # Sanitize input topic to match filename convention
         safe_query = self._sanitize_filename(topic)
-        
+
         files = [f for f in os.listdir(self.archive_dir) if f.endswith(".md")]
         files.sort(reverse=True)
-        
+
         for filename in files:
             if safe_query in filename:
                 return self._parse_markdown_file(os.path.join(self.archive_dir, filename))
-        
+
         return None
 
     def save(self, result: DebateResult) -> str:
@@ -148,24 +152,24 @@ Date: {result.created_at}
         """
         # 1. Save to Markdown
         path = self._save_to_markdown(result)
-        
+
         # 2. Save to ChromaDB
         self._save_to_chroma(result)
-        
+
         return path
 
     # --- SyncRepository Implementation ---
-    
+
     def list_all_chroma_ids(self) -> List[str]:
         try:
             host = os.getenv("CHROMA_HOST", "localhost")
             port = int(os.getenv("CHROMA_PORT", 8000))
             client = chromadb.HttpClient(host=host, port=port)
             collection = client.get_or_create_collection(name="macs_discussions")
-            
+
             # ChromaDB get() returns dict with 'ids'
             result = collection.get()
-            return set(result['ids'])
+            return set(result["ids"])
         except Exception as e:
             print(f"[System]: Failed to list Chroma IDs: {e}")
             return set()
@@ -178,7 +182,7 @@ Date: {result.created_at}
             port = int(os.getenv("CHROMA_PORT", 8000))
             client = chromadb.HttpClient(host=host, port=port)
             collection = client.get_or_create_collection(name="macs_discussions")
-            
+
             collection.delete(ids=ids)
             print(f"[System]: Deleted {len(ids)} documents from ChromaDB")
             return len(ids)
@@ -189,36 +193,36 @@ Date: {result.created_at}
     def list_all_file_ids(self) -> List[str]:
         if not os.path.exists(self.archive_dir):
             return set()
-            
+
         file_ids = set()
         files = [f for f in os.listdir(self.archive_dir) if f.endswith(".md")]
-        
+
         for filename in files:
             # Filename format: YYYY-mm-dd_HH-MM-SS_Topic.md
             # Chroma ID format: Topic_YYYYmmddHHMMSS
-            
+
             try:
                 # 1. Remove extension
                 name_body = filename[:-3]
-                
+
                 # 2. Extract Timestamp (first 19 chars: YYYY-mm-dd_HH-MM-SS)
                 # This assumes standard format. If customized, this might break.
                 # Regex might be safer.
                 match = re.match(r"^(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})_(.+)$", name_body)
                 if match:
                     ts_str, topic_part = match.groups()
-                    
+
                     # Convert timestamp: 2024-01-01_12-00-00 -> 20240101120000
                     compact_ts = ts_str.replace("-", "").replace("_", "")
-                    
+
                     # Reconstruct ID
                     # Note: _save_to_markdown calls _sanitize_filename on topic.
                     # The filename already contains the sanitized topic (topic_part).
                     # So we just use topic_part directly.
-                    
+
                     reconstructed_id = f"{topic_part}_{compact_ts}"
                     file_ids.add(reconstructed_id)
             except Exception:
                 continue
-                
+
         return file_ids

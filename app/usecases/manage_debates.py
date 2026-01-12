@@ -1,6 +1,8 @@
 from typing import List, Optional
+
 from app.domain.entities import DebateResult
 from app.domain.interfaces import MemoryVault
+
 
 class ListDebatesUseCase:
     def __init__(self, memory_vault: MemoryVault):
@@ -11,6 +13,7 @@ class ListDebatesUseCase:
         Retrieves a list of recent debates.
         """
         return self.memory_vault.list_debates(limit=limit)
+
 
 class GetDebateUseCase:
     def __init__(self, memory_vault: MemoryVault):
