@@ -25,4 +25,7 @@ jobs:
       run: uv sync --all-extras --dev
 
     - name: Run tests
+      env:
+        GEMINI_API_KEY: "dummy_key_for_ci"
+        THINKING_BRAIN_URL: "http://dummy_url"
       run: uv run pytest
