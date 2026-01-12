@@ -24,13 +24,16 @@ _Items promoted to Spec or currently under discussion._
 - [x] **Spec 016: DevOps Automation (CI)**
     - **Goal**: GitHub Actions for automated testing.
     - **Scope**: `.github/workflows/test.yml`, `uv` integration, `pytest`.
-- [ ] **Spec 017: Admin Dashboard (MVP)**
+- [x] **Spec 017: Admin Dashboard (MVP)**
     - **Goal**: Web-based viewer for Debates & Vector DB.
     - **Tech**: Streamlit.
 
 ## 1. Next (Phase 9: Reliability & Expansion)
 _Focus: DevOps & Quality Assurance & New Features._
 
+- [ ] **Spec 019: Persona Management System**
+    - **Goal**: Allow users to configure Agent Personas (e.g., Angry Critic, Friendly Mentor) without code changes.
+    - **Scope**: YAML/JSON configuration, API for switching personas, Dashboard integration.
 - [ ] **Voice Interface**: TTS/STT integration (Creative Studio concept).
 - [ ] **YouTube Sync**: Auto-upload debate content.
 - [ ] Dashboard for vector DB visualization.
