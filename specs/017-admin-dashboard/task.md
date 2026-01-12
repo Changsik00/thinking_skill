@@ -6,10 +6,10 @@
     - [x] 승인 (Approval).
 
 - [ ] **구현 (Execution)**
-    - [ ] **Admin App**: `app/admin/dashboard.py` (Streamlit).
-        - [ ] Tab 1: File Storage Viewer (Markdown).
-        - [ ] Tab 2: Vector DB Inspector (ChromaDB).
-        - [ ] Tab 3: Search Playground.
+    - [x] **Admin App**: `app/admin/dashboard.py` (Streamlit).
+        - [x] Tab 1: File Storage Viewer (Markdown).
+        - [x] Tab 2: Vector DB Inspector (ChromaDB).
+        - [x] Tab 3: Search Playground.
     - [x] **Infrastructure**: `pyproject.toml` dependency (`streamlit`).
     - [ ] **Documentation**: `docs/admin-guide.md` 작성.
         - [ ] Streamlit 소개 및 대시보드 사용법 정리.
