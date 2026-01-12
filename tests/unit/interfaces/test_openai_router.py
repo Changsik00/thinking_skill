@@ -21,7 +21,7 @@ async def test_openai_chat_completions():
     mock_use_case = MagicMock()
     
     # Mock execute_stream to yield chunks
-    async def mock_generator(topic):
+    async def mock_generator(topic, model_name=None):
         yield "Hello"
         yield " World"
         
