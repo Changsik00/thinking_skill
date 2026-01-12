@@ -1,4 +1,11 @@
 # app/infrastructure/llm/prompts.py
+import warnings
+
+warnings.warn(
+    "This module is deprecated. Use configs/personas.yaml and PersonaRepository instead.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 CREATIVE_SYSTEM_PROMPT = """
 당신은 '창의적 발산가(Creative Diverger)'입니다.

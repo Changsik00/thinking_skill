@@ -23,7 +23,7 @@ class LangGraphBrain(ThinkingBrain):
     """
     Implementation of ThinkingBrain using LangGraph and Gemini.
     """
-    def __init__(self, memory: Optional[MemoryVault] = None, nerve: Optional[Any] = None):
+    def __init__(self, memory: Optional[MemoryVault] = None, nerve: Optional[Any] = None, persona_repo: Optional[Any] = None):
         load_dotenv()
         self.api_key = os.getenv("GEMINI_API_KEY")
         if not self.api_key:
@@ -31,6 +31,7 @@ class LangGraphBrain(ThinkingBrain):
         
         self.memory = memory
         self.nerve = nerve  # N8nAdapter (NerveSystem)
+        self.persona_repo = persona_repo # PersonaRepository
         
         # Default model from env or fallback
         self.default_model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-001")
@@ -110,7 +111,12 @@ class LangGraphBrain(ThinkingBrain):
         # It's okay if it doesn't use it.
         llm = self._get_llm(config)
         
-        system_message = SystemMessage(content=CREATIVE_SYSTEM_PROMPT)
+        if self.persona_repo and (persona := self.persona_repo.get_persona("creative")):
+            system_prompt = persona.system_prompt
+        else:
+            system_prompt = CREATIVE_SYSTEM_PROMPT
+            
+        system_message = SystemMessage(content=system_prompt)
         response = llm.invoke([system_message] + messages)
         response.name = "creative"
         return {"messages": [response]}
@@ -119,7 +125,12 @@ class LangGraphBrain(ThinkingBrain):
         messages = state["messages"]
         llm = self._get_llm(config)
         
-        system_message = SystemMessage(content=CRITICAL_SYSTEM_PROMPT)
+        if self.persona_repo and (persona := self.persona_repo.get_persona("critical")):
+            system_prompt = persona.system_prompt
+        else:
+            system_prompt = CRITICAL_SYSTEM_PROMPT
+
+        system_message = SystemMessage(content=system_prompt)
         # Explicit trigger for critical agent
         trigger_message = HumanMessage(content="위의 아이디어들을 분석하고 비판해 주세요.")
         
