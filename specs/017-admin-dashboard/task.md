@@ -11,8 +11,8 @@
         - [x] Tab 2: Vector DB Inspector (ChromaDB).
         - [x] Tab 3: Search Playground.
     - [x] **Infrastructure**: `pyproject.toml` dependency (`streamlit`).
-    - [ ] **Documentation**: `docs/admin-guide.md` 작성.
-        - [ ] Streamlit 소개 및 대시보드 사용법 정리.
+    - [x] **Documentation**: `docs/admin-guide.md` 작성.
+        - [x] Streamlit 소개 및 대시보드 사용법 정리.
 
 - [ ] **검증 (Verification)**
     - [ ] 로컬 실행 테스트 (`streamlit run`).
