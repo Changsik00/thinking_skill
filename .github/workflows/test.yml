@@ -24,6 +24,12 @@ jobs:
     - name: Install dependencies
       run: uv sync --all-extras --dev
 
+    - name: Lint with Ruff
+      run: uv run ruff check .
+
+    - name: Check Formatting
+      run: uv run ruff format --check .
+
     - name: Run tests
       env:
         GEMINI_API_KEY: "dummy_key_for_ci"
