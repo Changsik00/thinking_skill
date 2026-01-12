@@ -18,7 +18,7 @@ _Items promoted to Spec or currently under discussion._
     - **Goal**: Disable auto-save; allow Agent to save only when requested or valuable.
     - **Method**: Modify `RunDebateUseCase` and ensure `save_debate` tool is effectively used by the Brain.
 
-- [ ] **Spec 014: Content Automation (n8n)**
+- [x] **Spec 014: Content Automation (n8n)**
     - **Goal**: Trigger external workflows (e.g., Slack, Blog) via n8n.
     - **Scope**: `N8nAdapter` update, `trigger_automation` tool, Local Verification.
 
