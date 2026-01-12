@@ -9,12 +9,12 @@ class FakeBrain(ThinkingBrain):
         self.call_count = 0
         self.last_topic = ""
 
-    def think(self, topic: str) -> str:
+    def think(self, topic: str, model_name: Optional[str] = None) -> str:
         self.call_count += 1
         self.last_topic = topic
         return self.response
 
-    async def think_stream(self, topic: str):
+    async def think_stream(self, topic: str, model_name: Optional[str] = None):
         self.call_count += 1
         self.last_topic = topic
         yield self.response
