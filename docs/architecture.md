@@ -14,6 +14,8 @@ graph TD
 ```
 
 ## 2. 계층 구조 (Layers)
+> [!NOTE]
+> 데이터 저장 정책, 파일 구조, Obsidian 통합에 대한 자세한 내용은 [Data Storage Policy](data-storage-policy.md)를 참고하세요.
 
 ### 2.1. Domain Layer (`app/domain`)
 - **역할**: 애플리케이션의 핵심 비즈니스 개념과 규칙을 정의합니다.
