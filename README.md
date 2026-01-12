@@ -12,9 +12,33 @@
 - **🔗 Automation (Nerve)**: n8n Webhook을 통해 Slack, Notion 등 외부 도구로 워크플로우 확장.
 - **📊 Admin Dashboard**: Streamlit 기반의 데이터 시각화 및 검색 테스트 도구.
 
-## 2. Quick Start (Usage)
+## 2. Infrastructure & Stack
+본 프로젝트는 **Local-First**를 지향하며 아래의 기술 스택과 포트를 사용합니다.
 
-### 2.1. Prerequisites
+### 2.1. Tech Stack
+| Category | Technology | Usage |
+| :--- | :--- | :--- |
+| **Logic** | **LangChain / LangGraph** | 멀티 에이전트 상태 관리 및 오케스트레이션 |
+| **LLM** | **Google Gemini** | 2.0 Flash (Creative) / 1.5 Pro (Critical) |
+| **DB** | **ChromaDB** | 벡터 임베딩 저장 및 시맨틱 검색 |
+| **Interface** | **FastAPI / OpenWebUI** | REST API 및 채팅 UI |
+| **Admin** | **Streamlit** | 데이터 관리 대시보드 |
+| **Auto** | **n8n** | 외부 서비스 연동 및 워크플로우 자동화 |
+
+### 2.2. Port Map
+로컬 포트 충돌 방지를 위해 아래 포트를 사용합니다.
+
+| Port | Service | Description |
+| :--- | :--- | :--- |
+| **8000** | **FastAPI / MCP Server** | 메인 백엔드 서버 (SSE 포함) |
+| **3000** | **OpenWebUI** | 채팅 클라이언트 웹 인터페이스 |
+| **8501** | **Streamlit Admin** | 관리자 대시보드 |
+| **5678** | **n8n** | 워크플로우 자동화 툴 |
+| **8080** | **ChromaDB** | 벡터 데이터베이스 API |
+
+## 3. Quick Start (Usage)
+
+### 3.1. Prerequisites
 - **Python 3.11+** & **[uv](https://docs.astral.sh/uv/)** (Package Manager)
 - **Docker** & Docker Compose (for ChromaDB, n8n, OpenWebUI)
 - **Generic API Key**: `.env` 설정 필요 (참고: `docs/setup-guide.md`)
@@ -38,7 +62,7 @@ uv sync
 
 ---
 
-## 3. Project Structure (폴더 구조)
+## 4. Project Structure (폴더 구조)
 **Clean Architecture** 원칙에 따라 계층이 분리되어 있습니다.
 
 ```text
@@ -55,7 +79,7 @@ uv sync
 └── data/                   # (GitIgnore) 로컬 데이터 저장소
 ```
 
-## 4. Documentation (문서)
+## 5. Documentation (문서)
 더 자세한 내용은 아래 문서를 참고하세요.
 
 | 문서 | 설명 |
