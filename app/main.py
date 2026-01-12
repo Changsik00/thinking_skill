@@ -21,9 +21,18 @@ state = AppState()
 async def lifespan(app: FastAPI):
     # Startup: Initialize Adapters
     print("[System]: Initializing dependencies...")
-    state.brain = LangGraphBrain(model_name="gemini-2.0-flash-001")
+    from app.infrastructure.storage.file_persona_repository import FilePersonaRepository
+    persona_repo = FilePersonaRepository()
+    
     state.memory = LocalAdapter(archive_dir="data/archives")
     state.nerve = N8nAdapter()
+    
+    # Inject dependencies into Brain
+    state.brain = LangGraphBrain(
+        memory=state.memory, 
+        nerve=state.nerve,
+        persona_repo=persona_repo
+    )
     print("[System]: Dependencies initialized.")
     yield
     # Shutdown: Cleanup if needed

@@ -123,12 +123,15 @@ def create_combined_app() -> FastAPI:
     # FastMCP's sse_app is a Starlette/FastAPI compatible app
     app.mount("/sse", mcp.sse_app)
     
+    from app.infrastructure.storage.file_persona_repository import FilePersonaRepository
+
     # 2. Setup Dependencies for OpenAI Router
     # We need to initialize the full stack (Brain + Nerve + Vault)
     nerve = N8nAdapter()
     vault = LocalAdapter()
+    persona_repo = FilePersonaRepository() # Load personas from YAML
     # Inject vault and nerve into brain to enable tools
-    brain = LangGraphBrain(memory=vault, nerve=nerve)
+    brain = LangGraphBrain(memory=vault, nerve=nerve, persona_repo=persona_repo)
     
     run_debate_use_case = RunDebateUseCase(
         brain=brain,

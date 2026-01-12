@@ -24,10 +24,14 @@ def main():
 
     # --- Composition Root ---
     # 1. Instantiate Adapters (Infrastructure)
+    # 1. Instantiate Adapters (Infrastructure)
     try:
-        brain = LangGraphBrain(model_name="gemini-2.0-flash-001")
+        from app.infrastructure.storage.file_persona_repository import FilePersonaRepository
+        persona_repo = FilePersonaRepository()
+        
         memory = LocalAdapter(archive_dir="data/archives")
         nerve = N8nAdapter()
+        brain = LangGraphBrain(memory=memory, nerve=nerve, persona_repo=persona_repo)  
         
         # 2. Inject Dependencies into Use Case
         use_case = RunDebateUseCase(brain=brain, memory=memory, nerve=nerve)
