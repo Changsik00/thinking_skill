@@ -15,8 +15,9 @@
 
 ## 2. 주요 기능 (Features)
 
-- **삼각 토론 시스템**: 창의적 발산가(Creative)와 냉철한 비평가(Critical)의 자동 토론.
-- **자동 아카이빙**: 결과물을 Markdown 파일 및 ChromaDB(임베딩)에 영구 저장.
+- **삼각 토론 시스템**: 창의적 발산가(Creative)와 냉철한 비평가(Critical)의 자동 토론. (Gemini 2.0/Gemini 1.5 Dynamic Selection)
+- **선택적 아카이빙**: Agent가 토론 가치를 판단하여 Markdown 파일 및 ChromaDB(임베딩)에 선택적으로 영구 저장 (`save_debate`).
+- **OpenWebUI 지원**: 직관적인 채팅 인터페이스 제공 (MCP Tool 호출 지원).
 - **자동화 연동**: n8n Webhook을 통해 외부 워크플로우(Notion, Slack 등) 트리거.
 - **REST API**: FastAPI 기반의 HTTP 인터페이스 제공.
 
@@ -30,7 +31,8 @@
 ```bash
 docker compose up -d
 ```
-ChromaDB와 n8n 컨테이너가 실행됩니다.
+ChromaDB, n8n, OpenWebUI (`http://localhost:3000`), MCPO Bridge 컨테이너가 실행됩니다.
+**OpenWebUI**에 접속하여 MCP 도구들을 활용할 수 있습니다.
 
 ### 3.3. 서버 실행 (FastAPI)
 ```bash
