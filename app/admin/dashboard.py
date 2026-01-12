@@ -10,7 +10,7 @@ st.set_page_config(page_title="MACS Admin Dashboard", layout="wide")
 st.title("🧠 MACS Admin Dashboard")
 
 # Constants
-DEBATE_DIR = "data/debates"
+DEBATE_DIR = "data/archives"
 CHROMA_DIR = "data/chroma"
 
 # Tabs
