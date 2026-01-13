@@ -37,8 +37,16 @@ _Focus: DevOps & Quality Assurance & New Features._
 - [x] **Spec 020: Linting & Formatting Automation**
     - **Goal**: Auto-format code and catch errors (like IndentationError) early.
     - **Tech**: `ruff` (linter + formatter), `pre-commit` (optional), CI integration.
-- [ ] **Voice Interface**: TTS/STT integration (Creative Studio concept).
-- [ ] **YouTube Sync**: Auto-upload debate content.
+- [x] **Spec 020: Linting & Formatting Automation**
+    - **Goal**: Auto-format code and catch errors (like IndentationError) early.
+    - **Tech**: `ruff` (linter + formatter), `pre-commit` (optional), CI integration.
+
+- [ ] **Spec 021: YouTube Transcript Integration**
+    - **Goal**: Fetch transcripts from YouTube videos to enable discussion ("Talk with Video").
+    - **Tech**: `youtube-transcript-api`, New Tool `fetch_transcript`.
+
+- [ ] **Spec 022: Voice Interface**: TTS/STT integration (Creative Studio concept).
+- [ ] **Targeted Archiving (YouTube)**: Extract and save only key insights from video transcripts to Vector DB (Refinement of Spec 021).
 - [ ] Dashboard for vector DB visualization.
 - [ ] **Multi-Provider Support**: Add adapters for OpenAI (GPT-4o) and Anthropic (Claude 3.5).
 - [ ] **ChromaDB Admin UI**: Add `chromadb-admin` container (Dedicated Tool).
