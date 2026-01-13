@@ -17,6 +17,7 @@ dependencies = [
     "streamlit>=1.52.2",
     "uvicorn>=0.40.0",
     "watchdog>=6.0.0",
+    "youtube-transcript-api>=1.2.3",
 ]
 
 [dependency-groups]
