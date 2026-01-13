@@ -30,12 +30,49 @@ class YoutubeAdapter:
         """
         try:
             video_id = self.get_video_id(url)
-            # Fetch transcript (tries to get manual subs first, then auto-generated)
-            # Default to English or Korean, but falls back to any available
-            transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=["ko", "en"])
+            
+            # Try standard static API first
+            try:
+                if hasattr(YouTubeTranscriptApi, 'list_transcripts'):
+                    transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+                elif hasattr(YouTubeTranscriptApi, 'list'):
+                     # Try static list if possible (unlikely given previous error, but safe check)
+                     # If this fails with missing arg, the except block below might catch it? 
+                     # Actually, calling it and failing is better handled by try-except.
+                     transcript_list = YouTubeTranscriptApi.list(video_id)
+                else:
+                    raise AttributeError("No list method found")
+            except (AttributeError, TypeError):
+                # Fallback: The installed version requires instantiation (e.g. YouTubeTranscriptApi().list(...))
+                api = YouTubeTranscriptApi()
+                if hasattr(api, 'list_transcripts'):
+                    transcript_list = api.list_transcripts(video_id)
+                elif hasattr(api, 'list'):
+                    transcript_list = api.list(video_id)
+                else:
+                    raise
+            
+            # Try to find Korean or English transcript (manual or auto)
+            # find_transcript searches for the first available language in the list
+            try:
+                transcript = transcript_list.find_transcript(['ko', 'en'])
+            except Exception:
+                # If specific languages not found, try to get any available transcript
+                # This might happen if video only has 'es' or 'fr' etc.
+                # iterate and pick first
+                transcript = next(iter(transcript_list))
+
+            # Fetch the actual data
+            transcript_data = transcript.fetch()
 
             # Format to plain text
-            # Manually join text to avoid dependency issues with TextFormatter expecting objects vs dicts
-            return "\n".join([item["text"] for item in transcript])
+            lines = []
+            for item in transcript_data:
+                if isinstance(item, dict):
+                    lines.append(item["text"])
+                else:
+                    # Assume object with .text attribute
+                    lines.append(item.text)
+            return "\n".join(lines)
         except Exception as e:
             return f"Failed to fetch transcript: {str(e)}"
