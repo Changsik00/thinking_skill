@@ -2,7 +2,6 @@
 import re
 
 from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api import YouTubeTranscriptApi
 
 
 class YoutubeAdapter:
