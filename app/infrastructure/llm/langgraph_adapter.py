@@ -39,6 +39,7 @@ class LangGraphBrain(ThinkingBrain):
         memory: Optional[MemoryVault] = None,
         nerve: Optional[Any] = None,
         persona_repo: Optional[Any] = None,
+        tools: Optional[List[Any]] = None,
     ):
         load_dotenv()
         self.api_key = os.getenv("GEMINI_API_KEY")
@@ -48,6 +49,7 @@ class LangGraphBrain(ThinkingBrain):
         self.memory = memory
         self.nerve = nerve  # N8nAdapter (NerveSystem)
         self.persona_repo = persona_repo  # PersonaRepository
+        self.extra_tools = tools or []
 
         # Default model from env or fallback
         self.default_model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-001")
@@ -69,6 +71,10 @@ class LangGraphBrain(ThinkingBrain):
             tools.append(self._create_save_tool())
         if self.nerve:
             tools.append(self._create_automation_tool())
+
+        # Add externally injected tools
+        if self.extra_tools:
+            tools.extend(self.extra_tools)
 
         if tools:
             return llm.bind_tools(tools)
@@ -173,6 +179,10 @@ class LangGraphBrain(ThinkingBrain):
             tools.append(self._create_save_tool())
         if self.nerve:
             tools.append(self._create_automation_tool())
+
+        # Add externally injected tools
+        if self.extra_tools:
+            tools.extend(self.extra_tools)
 
         # If tools enabled, add ToolNode and Conditional Edges
         if tools:
