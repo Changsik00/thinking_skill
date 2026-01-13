@@ -30,32 +30,32 @@ class YoutubeAdapter:
         """
         try:
             video_id = self.get_video_id(url)
-            
+
             # Try standard static API first
             try:
-                if hasattr(YouTubeTranscriptApi, 'list_transcripts'):
+                if hasattr(YouTubeTranscriptApi, "list_transcripts"):
                     transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-                elif hasattr(YouTubeTranscriptApi, 'list'):
-                     # Try static list if possible (unlikely given previous error, but safe check)
-                     # If this fails with missing arg, the except block below might catch it? 
-                     # Actually, calling it and failing is better handled by try-except.
-                     transcript_list = YouTubeTranscriptApi.list(video_id)
+                elif hasattr(YouTubeTranscriptApi, "list"):
+                    # Try static list if possible (unlikely given previous error, but safe check)
+                    # If this fails with missing arg, the except block below might catch it?
+                    # Actually, calling it and failing is better handled by try-except.
+                    transcript_list = YouTubeTranscriptApi.list(video_id)
                 else:
                     raise AttributeError("No list method found")
             except (AttributeError, TypeError):
                 # Fallback: The installed version requires instantiation (e.g. YouTubeTranscriptApi().list(...))
                 api = YouTubeTranscriptApi()
-                if hasattr(api, 'list_transcripts'):
+                if hasattr(api, "list_transcripts"):
                     transcript_list = api.list_transcripts(video_id)
-                elif hasattr(api, 'list'):
+                elif hasattr(api, "list"):
                     transcript_list = api.list(video_id)
                 else:
                     raise
-            
+
             # Try to find Korean or English transcript (manual or auto)
             # find_transcript searches for the first available language in the list
             try:
-                transcript = transcript_list.find_transcript(['ko', 'en'])
+                transcript = transcript_list.find_transcript(["ko", "en"])
             except Exception:
                 # If specific languages not found, try to get any available transcript
                 # This might happen if video only has 'es' or 'fr' etc.
