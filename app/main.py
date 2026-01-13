@@ -16,7 +16,7 @@ from app.interfaces.api.openai_router import (
 )
 from app.interfaces.api.router import get_run_debate_use_case
 from app.interfaces.api.router import router as api_router
-from app.interfaces.mcp_server import mcp
+from app.interfaces.mcp_server import fetch_transcript, mcp
 from app.usecases.run_debate import RunDebateUseCase
 
 
@@ -41,7 +41,12 @@ async def lifespan(app: FastAPI):
     state.nerve = N8nAdapter()
 
     # Inject dependencies into Brain
-    state.brain = LangGraphBrain(memory=state.memory, nerve=state.nerve, persona_repo=persona_repo)
+    state.brain = LangGraphBrain(
+        memory=state.memory, 
+        nerve=state.nerve, 
+        persona_repo=persona_repo,
+        tools=[fetch_transcript]
+    )
     print("[System]: Dependencies initialized.")
     yield
     # Shutdown: Cleanup if needed
