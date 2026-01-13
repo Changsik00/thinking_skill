@@ -4,6 +4,7 @@ from mcp.server.fastmcp import Context, FastMCP
 
 from app.domain.entities import DebateResult
 from app.infrastructure.automation.n8n_adapter import N8nAdapter
+from app.infrastructure.external.youtube_adapter import YoutubeAdapter
 from app.infrastructure.llm.langgraph_adapter import LangGraphBrain
 from app.infrastructure.storage.file_persona_repository import FilePersonaRepository
 from app.infrastructure.storage.local_adapter import LocalAdapter
@@ -126,6 +127,22 @@ async def sync_debates(dry_run: bool = False) -> str:
         return f"Sync failed. Error: {str(e)}"
 
 
+# DI for YouTube
+youtube_adapter = YoutubeAdapter()
+
+
+@mcp.tool()
+async def fetch_transcript(url: str) -> str:
+    """
+    Fetch the transcript (subtitles) of a YouTube video given its URL.
+    Use this when the user shares a YouTube link and asks for a summary or discussion about it.
+
+    Args:
+        url: The full YouTube URL (e.g., https://www.youtube.com/watch?v=...)
+    """
+    return youtube_adapter.get_transcript(url)
+
+
 def create_combined_app() -> FastAPI:
     """
     Creates a combined FastAPI app that serves both:
@@ -146,7 +163,7 @@ def create_combined_app() -> FastAPI:
     vault = LocalAdapter()
     persona_repo = FilePersonaRepository()  # Load personas from YAML
     # Inject vault and nerve into brain to enable tools
-    brain = LangGraphBrain(memory=vault, nerve=nerve, persona_repo=persona_repo)
+    brain = LangGraphBrain(memory=vault, nerve=nerve, persona_repo=persona_repo, tools=[fetch_transcript])
 
     run_debate_use_case = RunDebateUseCase(brain=brain, memory=vault, nerve=nerve)
 
