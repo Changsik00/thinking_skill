@@ -171,7 +171,7 @@ class LangGraphBrain(ThinkingBrain):
         workflow.add_node("critical", self._critical_node)
 
         workflow.add_edge(START, "creative")
-        workflow.add_edge("creative", "critical")
+        # workflow.add_edge("creative", "critical") -> Moved to conditional logic below
 
         # Collect tools
         tools = []
@@ -188,12 +188,28 @@ class LangGraphBrain(ThinkingBrain):
         if tools:
             workflow.add_node("tools", ToolNode(tools))
 
+            # Creative node can now use tools. 
+            # If tool called -> goto 'tools'. Else -> goto 'critical'
+            workflow.add_conditional_edges(
+                "creative",
+                tools_condition,
+                {"tools": "tools", END: "critical"}
+            )
+
+            # Critical node can also use tools (existing logic)
             workflow.add_conditional_edges(
                 "critical",
                 tools_condition,
             )
+            
+            # Tools always return to critical (central node for synthesis)
+            # Or should they return to the node that called them? 
+            # In this simple graph, returning to 'critical' essentially moves the conversation forward.
+            # But if 'creative' called the tool, we want 'critical' to analyze the result.
             workflow.add_edge("tools", "critical")
         else:
+            # Fallback for no tools
+            workflow.add_edge("creative", "critical")
             workflow.add_edge("critical", END)
 
         return workflow.compile()
