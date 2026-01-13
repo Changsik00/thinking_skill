@@ -39,6 +39,7 @@ class LangGraphBrain(ThinkingBrain):
         memory: Optional[MemoryVault] = None,
         nerve: Optional[Any] = None,
         persona_repo: Optional[Any] = None,
+        tools: Optional[List[Any]] = None,
     ):
         load_dotenv()
         self.api_key = os.getenv("GEMINI_API_KEY")
@@ -48,6 +49,7 @@ class LangGraphBrain(ThinkingBrain):
         self.memory = memory
         self.nerve = nerve  # N8nAdapter (NerveSystem)
         self.persona_repo = persona_repo  # PersonaRepository
+        self.extra_tools = tools or []
 
         # Default model from env or fallback
         self.default_model_name = os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-001")
@@ -61,6 +63,11 @@ class LangGraphBrain(ThinkingBrain):
         if config and "configurable" in config:
             model_name = config["configurable"].get("model_name", self.default_model_name)
 
+        # [Safety Fix] Thinking models (e.g. gemini-2.0-flash-thinking) often don't support tools.
+        # If we detect a 'thinking' model, transparently switch to the standard flash model to prevent 404/Tool errors.
+        if "thinking" in model_name.lower():
+            model_name = "gemini-2.0-flash-001"
+
         llm = ChatGoogleGenerativeAI(model=model_name, google_api_key=self.api_key, temperature=0.7)
 
         # Bind tools if available
@@ -69,6 +76,10 @@ class LangGraphBrain(ThinkingBrain):
             tools.append(self._create_save_tool())
         if self.nerve:
             tools.append(self._create_automation_tool())
+
+        # Add externally injected tools
+        if self.extra_tools:
+            tools.extend(self.extra_tools)
 
         if tools:
             return llm.bind_tools(tools)
@@ -165,7 +176,7 @@ class LangGraphBrain(ThinkingBrain):
         workflow.add_node("critical", self._critical_node)
 
         workflow.add_edge(START, "creative")
-        workflow.add_edge("creative", "critical")
+        # workflow.add_edge("creative", "critical") -> Moved to conditional logic below
 
         # Collect tools
         tools = []
@@ -174,16 +185,32 @@ class LangGraphBrain(ThinkingBrain):
         if self.nerve:
             tools.append(self._create_automation_tool())
 
+        # Add externally injected tools
+        if self.extra_tools:
+            tools.extend(self.extra_tools)
+
         # If tools enabled, add ToolNode and Conditional Edges
         if tools:
             workflow.add_node("tools", ToolNode(tools))
 
+            # Creative node can now use tools.
+            # If tool called -> goto 'tools'. Else -> goto 'critical'
+            workflow.add_conditional_edges("creative", tools_condition, {"tools": "tools", END: "critical"})
+
+            # Critical node can also use tools (existing logic)
             workflow.add_conditional_edges(
                 "critical",
                 tools_condition,
             )
+
+            # Tools always return to critical (central node for synthesis)
+            # Or should they return to the node that called them?
+            # In this simple graph, returning to 'critical' essentially moves the conversation forward.
+            # But if 'creative' called the tool, we want 'critical' to analyze the result.
             workflow.add_edge("tools", "critical")
         else:
+            # Fallback for no tools
+            workflow.add_edge("creative", "critical")
             workflow.add_edge("critical", END)
 
         return workflow.compile()
