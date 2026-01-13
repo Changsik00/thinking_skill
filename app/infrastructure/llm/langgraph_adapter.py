@@ -62,6 +62,11 @@ class LangGraphBrain(ThinkingBrain):
         model_name = self.default_model_name
         if config and "configurable" in config:
             model_name = config["configurable"].get("model_name", self.default_model_name)
+        
+        # [Safety Fix] Thinking models (e.g. gemini-2.0-flash-thinking) often don't support tools.
+        # If we detect a 'thinking' model, transparently switch to the standard flash model to prevent 404/Tool errors.
+        if "thinking" in model_name.lower():
+            model_name = "gemini-2.0-flash-001"
 
         llm = ChatGoogleGenerativeAI(model=model_name, google_api_key=self.api_key, temperature=0.7)
 
