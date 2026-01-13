@@ -73,4 +73,4 @@ app.include_router(openai_router)
 # We mount at '/mcp' so the endpoints become:
 # - SSE: /mcp/sse
 # - Messages: /mcp/messages
-app.mount("/mcp", mcp.sse_app())
+app.mount("/mcp", mcp.sse_app)
