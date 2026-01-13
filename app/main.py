@@ -42,10 +42,7 @@ async def lifespan(app: FastAPI):
 
     # Inject dependencies into Brain
     state.brain = LangGraphBrain(
-        memory=state.memory, 
-        nerve=state.nerve, 
-        persona_repo=persona_repo,
-        tools=[fetch_transcript]
+        memory=state.memory, nerve=state.nerve, persona_repo=persona_repo, tools=[fetch_transcript]
     )
     print("[System]: Dependencies initialized.")
     yield
